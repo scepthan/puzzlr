@@ -2,7 +2,7 @@
 
 A puzzling toolkit designed around a rudimentary universal solver.
 
-[**Try it online**](https://ethproductions.github.io/puzzlr)
+[**Try it online**](https://scepthan.github.io/puzzlr)
 
 ## Install
 
