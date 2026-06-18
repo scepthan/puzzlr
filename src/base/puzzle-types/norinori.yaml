@@ -6,8 +6,8 @@ renderSettings:
     - edgearea
     - binarygrey
 
-hints:
-  - type: areas
+inputs:
+  areas: true
 
 variables:
   required:
@@ -18,7 +18,7 @@ constraints:
   - on: areas
     check:
       equals:
-        - sum: area.cells
+        - sum: cells
         - 2
   - on: cells
     check:

@@ -1,8 +1,8 @@
 import Puzzle from "@/base/Puzzle";
-import puzzleTypes from "@/base/puzzle-types";
+import { PuzzleType, puzzleMap } from "@/base/puzzle-types";
 
-let puzzleData: any = null;
-let puzzleType: any = null;
+let puzzleData: Puzzle | null = null;
+let puzzleType: PuzzleType | undefined;
 let livePuzzle: Puzzle | null = null;
 let options: any = { max_depth: 2, mode: "fast" };
 
@@ -36,8 +36,9 @@ onmessage = (e) => {
 function loadPuzzle(puzzle: Puzzle) {
   puzzleData = puzzle;
   const type = puzzle.type;
-  puzzleType = puzzleTypes.get(type);
-  livePuzzle = new puzzleType(puzzleData);
+  puzzleType = puzzleMap.get(type);
+  if (!puzzleType) throw new Error("Unknown puzzle type: " + type);
+  livePuzzle = new puzzleType(puzzleData as any);
   if (!livePuzzle) return;
   options = { max_depth: 2, mode: "fast" };
   livePuzzle.initiate_solve(options);

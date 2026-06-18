@@ -17,5 +17,6 @@ const puzzleTypes = [
   ThermometersPuzzle,
   YinYangPuzzle,
 ];
-const puzzleMap = new Map(puzzleTypes.map((puzzle) => [puzzle.type, puzzle]));
-export default puzzleMap;
+export type PuzzleType = (typeof puzzleTypes)[number];
+
+export const puzzleMap = new Map(puzzleTypes.map((puzzle) => [puzzle.type, puzzle]));

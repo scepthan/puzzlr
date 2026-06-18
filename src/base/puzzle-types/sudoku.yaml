@@ -1,0 +1,24 @@
+name: sudoku
+
+renderSettings:
+  defaultScale: 36
+  funcs:
+    - edgearea
+    - numhint
+    - sudoku
+
+inputs:
+  boxes: true
+  task:
+    type: num_36
+    empty_value: 0
+
+variables:
+  required:
+    - on: cells
+      value: num_1_to_size
+
+constraints:
+  - on: cell_lines, areas
+    check:
+      all_distinct: cells

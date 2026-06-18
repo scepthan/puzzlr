@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
-import puzzleTypes from "@/base/puzzle-types";
+import { puzzleMap } from "@/base/puzzle-types";
 
 type Deduction = {
   variable: number;
@@ -102,7 +102,7 @@ watch(puzzleFile, (file) => {
     }
     const type = puzzleData.type;
 
-    puzzleType = puzzleTypes.get(type);
+    puzzleType = puzzleMap.get(type);
     if (!puzzleType) {
       statusText.value = "Could not determine puzzle type.";
       console.log("Could not determine puzzle type.");
