@@ -10,7 +10,9 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "build-node": "tsc --project tsconfig.npm.json",
-    "lint": "eslint --fix ."
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint --fix .",
+    "format": "prettier --write src/"
   },
   "bin": "./index.js",
   "repository": {

@@ -25,22 +25,15 @@ export default class ThermometersPuzzle extends Puzzle<SquareGrid> {
   }) {
     super(SquareGrid.fromAreas(thermometers));
     if (this.grid.width + this.grid.height != sums.length)
-      throw new Error(
-        "Task length must equal width of grid plus height of grid",
-      );
+      throw new Error("Task length must equal width of grid plus height of grid");
     this.areas = thermometers;
     this.colHints = sums.slice(0, this.grid.width);
     this.rowHints = sums.slice(this.grid.width);
     this.structures = { thermo: [] };
 
-    const THERMO_LENGTH = function (
-      [thermo, cell]: PuzzleVariable[],
-      target: number,
-    ) {
-      if (cell.valueHas(0) && thermo.value.some((v) => +v <= target))
-        return true;
-      if (cell.valueHas(1) && thermo.value.some((v) => +v > target))
-        return true;
+    const THERMO_LENGTH = function ([thermo, cell]: PuzzleVariable[], target: number) {
+      if (cell.valueHas(0) && thermo.value.some((v) => +v <= target)) return true;
+      if (cell.valueHas(1) && thermo.value.some((v) => +v > target)) return true;
       return false;
     };
     for (const area of thermometers) {

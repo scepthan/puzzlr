@@ -26,9 +26,7 @@ export default class StitchesPuzzle extends Puzzle<SquareGrid> {
   }) {
     super(SquareGrid.fromAreas(areas));
     if (this.grid.width + this.grid.height != sums.length)
-      throw new Error(
-        "Task length must equal width of grid plus height of grid",
-      );
+      throw new Error("Task length must equal width of grid plus height of grid");
     this.areas = areas;
     this.colHints = sums.slice(0, this.grid.width);
     this.rowHints = sums.slice(this.grid.width);
@@ -53,18 +51,8 @@ export default class StitchesPuzzle extends Puzzle<SquareGrid> {
     }
     for (const cell of this.grid.cells) {
       this.addVariable(cell, [0, 1], false);
-      this.addConstraint(
-        SUM_EQUALS_IF,
-        [cell, ...cell.edges.filter((e) => e.var_id > -1)],
-        0,
-        0,
-      );
-      this.addConstraint(
-        SUM_EQUALS_IF,
-        [cell, ...cell.edges.filter((e) => e.var_id > -1)],
-        1,
-        1,
-      );
+      this.addConstraint(SUM_EQUALS_IF, [cell, ...cell.edges.filter((e) => e.var_id > -1)], 0, 0);
+      this.addConstraint(SUM_EQUALS_IF, [cell, ...cell.edges.filter((e) => e.var_id > -1)], 1, 1);
     }
 
     let i = 0;

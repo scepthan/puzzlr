@@ -130,12 +130,8 @@ function resetPuzzle(newPuzzle: Puzzle, options: Options) {
 function renderPuzzle() {
   elemBuffer = [];
 
-  const edgefuncs = renderfuncs
-    .map((f) => renderElements.edge[f])
-    .filter((f) => f);
-  const cellfuncs = renderfuncs
-    .map((f) => renderElements.cell[f])
-    .filter((f) => f);
+  const edgefuncs = renderfuncs.map((f) => renderElements.edge[f]).filter((f) => f);
+  const cellfuncs = renderfuncs.map((f) => renderElements.cell[f]).filter((f) => f);
 
   const render = (
     objects: PuzzleVariable[],
@@ -195,19 +191,12 @@ function createSVGElement(name: string, groupName: string, attributes: any) {
     elem.setAttributeNS(null, prop, attributes[prop]);
   }
   const group = groups.get(groupName);
-  if (!group)
-    throw new Error("Could not find SVG group with name " + groupName);
+  if (!group) throw new Error("Could not find SVG group with name " + groupName);
   group.appendChild(elem);
   elemBuffer.push(elem);
   return elem;
 }
-function addHint(
-  hint: string,
-  x: number,
-  y: number,
-  color = "black",
-  size = scale / 2,
-) {
+function addHint(hint: string, x: number, y: number, color = "black", size = scale / 2) {
   const text = createSVGElement("text", "hints", {
     fill: color,
     style: "font: bold " + size + "px sans-serif",
@@ -224,9 +213,7 @@ function addLine(
   {
     fromVert,
     toVert,
-  }:
-    | GridEdge
-    | { fromVert: { x: number; y: number }; toVert: { x: number; y: number } },
+  }: GridEdge | { fromVert: { x: number; y: number }; toVert: { x: number; y: number } },
   stroke: string,
   strokeWidth: number,
   strokeLinecap: string = "",
@@ -248,10 +235,7 @@ function addLine(
 function getCellPath(cell: GridCell) {
   return (
     cell.verts
-      .map(
-        (v, i) =>
-          (i > 0 ? "L " : "M ") + [convertX(v.rpos.x), convertY(v.rpos.y)],
-      )
+      .map((v, i) => (i > 0 ? "L " : "M ") + [convertX(v.rpos.x), convertY(v.rpos.y)])
       .join(" ") + " Z"
   );
 }
@@ -315,12 +299,7 @@ const renderElements: {
   cell: {
     binarygrey: (cell) => {
       createSVGElement("path", "cells-base", {
-        fill:
-          cell.value.length != 1
-            ? "#CCC"
-            : cell.value[0] == 1
-              ? "#555"
-              : "#FFF",
+        fill: cell.value.length != 1 ? "#CCC" : cell.value[0] == 1 ? "#555" : "#FFF",
         d: getCellPath(cell),
       });
     },
@@ -336,10 +315,7 @@ const renderElements: {
                 const r = [0.3, 0.15][i % 2];
                 return (
                   (i > 0 ? "L " : "M ") +
-                  [
-                    convertX(x + Math.cos(angle) * r),
-                    convertY(y + Math.sin(angle) * r),
-                  ]
+                  [convertX(x + Math.cos(angle) * r), convertY(y + Math.sin(angle) * r)]
                 );
               })
               .join(" ") + " Z",
@@ -353,13 +329,7 @@ const renderElements: {
     numhint: (cell) => {
       if (cell.hint === undefined || cell.hint == -1) return;
       const { x, y } = cell.midpoint;
-      addHint(
-        cell.hint.toString(),
-        convertX(x),
-        convertY(y),
-        "#000",
-        scale / 1.5,
-      );
+      addHint(cell.hint.toString(), convertX(x), convertY(y), "#000", scale / 1.5);
     },
     sudoku: (cell) => {
       if (cell.hint !== undefined && cell.hint != -1) return;
@@ -427,14 +397,10 @@ const renderElements: {
     },
     binarythermo: (cell: GridCell) => {
       const prevCell = cell.adjacentEdge.find(
-        (c) =>
-          c.area_id == cell.area_id &&
-          c.thermoIndex == (cell.thermoIndex ?? 0) - 1,
+        (c) => c.area_id == cell.area_id && c.thermoIndex == (cell.thermoIndex ?? 0) - 1,
       );
       const nextCell = cell.adjacentEdge.find(
-        (c) =>
-          c.area_id == cell.area_id &&
-          c.thermoIndex == (cell.thermoIndex ?? 0) + 1,
+        (c) => c.area_id == cell.area_id && c.thermoIndex == (cell.thermoIndex ?? 0) + 1,
       );
       const prevDir = prevCell
         ? prevCell.vpos.x > cell.vpos.x
@@ -469,12 +435,11 @@ const renderElements: {
       // location of the cell in the render
       const xyConversion = (a: number[]) => [
         convertX(mid.x + a[dir1 % 2] * [1, -1, -1, 1][dir1]),
-        convertY(mid.y + a[dir1 % 2 ^ 1] * [1, 1, -1, -1][dir1]),
+        convertY(mid.y + a[(dir1 % 2) ^ 1] * [1, 1, -1, -1][dir1]),
       ];
 
       const tw = 0.16; // thermo width, as ratio of cell width from center to edge of thermo
-      const fill =
-        cell.value.length > 1 ? "#CCC" : cell.value[0] == 1 ? "#D14" : "#FFF";
+      const fill = cell.value.length > 1 ? "#CCC" : cell.value[0] == 1 ? "#D14" : "#FFF";
       const stroke = "#333";
       const swidth = scale / 12;
 
@@ -513,9 +478,7 @@ const renderElements: {
           fill: fill,
           stroke: stroke,
           "stroke-width": swidth,
-          d: `M ${p[0]} L ${p[1]} A ${bw * scale} ${bw * scale} 0 1 0 ${
-            p[2]
-          } L ${p[3]}`,
+          d: `M ${p[0]} L ${p[1]} A ${bw * scale} ${bw * scale} 0 1 0 ${p[2]} L ${p[3]}`,
         });
         return;
       }

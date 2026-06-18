@@ -7,8 +7,7 @@ function find_sums(vars: PuzzleVariable[]) {
   for (const v of vars) {
     const oldsums = sums;
     sums = new Set();
-    for (const value of v.value)
-      for (const prev of oldsums) sums.add(prev + Number(value));
+    for (const value of v.value) for (const prev of oldsums) sums.add(prev + Number(value));
   }
   return sums;
 }
@@ -29,10 +28,7 @@ export function SUM_EQUALS_IF(
   return SUM_EQUALS(vars, sum_target);
 }
 
-export function CONTAINS_ALL(
-  vars: PuzzleVariable[],
-  target: PuzzleVariableValue[],
-) {
+export function CONTAINS_ALL(vars: PuzzleVariable[], target: PuzzleVariableValue[]) {
   let sets = new Set([0]);
   for (const v of vars) {
     const oldsets = sets;
@@ -47,11 +43,7 @@ export function CONTAINS_ALL(
   return sets.has(2 ** target.length - 1);
 }
 
-export function CONTIG_EDGE_ALL(
-  edges: GridEdge[],
-  target: PuzzleVariableValue,
-  start: GridEdge,
-) {
+export function CONTIG_EDGE_ALL(edges: GridEdge[], target: PuzzleVariableValue, start: GridEdge) {
   // Strategy: run this check every time an edge has its value changed.
 
   // If an edge had all non-target values removed, check to see if it is
@@ -110,19 +102,12 @@ export function CONTIG_EDGE_ALL(
     // to disappear).
     let edges_found = 0;
     for (const edge of paths[0].found) if (edge.valueIs(target)) edges_found++;
-    return (
-      edges_found == 0 ||
-      edges_found == edges.filter((e) => e.valueIs(target)).length
-    );
+    return edges_found == 0 || edges_found == edges.filter((e) => e.valueIs(target)).length;
   } else return true;
 }
 CONTIG_EDGE_ALL.global = true;
 
-export function CONTIG_CELL_ALL(
-  cells: GridCell[],
-  target: PuzzleVariableValue,
-  start: GridCell,
-) {
+export function CONTIG_CELL_ALL(cells: GridCell[], target: PuzzleVariableValue, start: GridCell) {
   // Strategy: run this check every time an cell has its value changed.
 
   // If an cell had all non-target values removed, check to see if it is
@@ -163,10 +148,7 @@ export function CONTIG_CELL_ALL(
       const { check_queue, found } = paths.shift()!;
       if (check_queue.length == 0) {
         if ([...found].some((cell) => cell.valueIs(target))) {
-          if (
-            found_branch ||
-            paths.some((p) => [...p.found].some((c) => c.valueIs(target)))
-          ) {
+          if (found_branch || paths.some((p) => [...p.found].some((c) => c.valueIs(target)))) {
             // there are 2 separate branches with solid cells
             return false;
           } else {
@@ -183,11 +165,7 @@ export function CONTIG_CELL_ALL(
         }
       }
       const nextCell = check_queue.pop()!;
-      if (
-        cells.includes(nextCell) &&
-        !found.has(nextCell) &&
-        nextCell.valueHas(target)
-      ) {
+      if (cells.includes(nextCell) && !found.has(nextCell) && nextCell.valueHas(target)) {
         for (const branch of paths) {
           if (branch.found.has(nextCell)) {
             // if all branches have merged then we're good

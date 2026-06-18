@@ -18,14 +18,9 @@ export default class GridCell extends PuzzleVariable {
   /**
    * Creates a new grid cell out of a list of vertices.
    */
-  constructor(
-    grid: PuzzleGrid,
-    verts: GridVertex[],
-    vpos?: { x: number; y: number },
-  ) {
+  constructor(grid: PuzzleGrid, verts: GridVertex[], vpos?: { x: number; y: number }) {
     super();
-    if (verts.length < 3)
-      throw new Error("Cell must contain at least 3 vertices");
+    if (verts.length < 3) throw new Error("Cell must contain at least 3 vertices");
 
     this.grid = grid;
     this.verts = verts;
@@ -58,8 +53,7 @@ export default class GridCell extends PuzzleVariable {
       const startInd = v.cells.indexOf(this);
       for (let i = 1; i < v.cells.length - 1; i++) {
         const cell = v.cells[(startInd + i) % v.cells.length];
-        if (cell != null)
-          adjacent.push({ type: i == 1 ? "edge" : "vert", cell });
+        if (cell != null) adjacent.push({ type: i == 1 ? "edge" : "vert", cell });
       }
     }
     return adjacent;

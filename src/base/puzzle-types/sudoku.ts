@@ -17,13 +17,10 @@ export default class SudokuPuzzle extends Puzzle<SquareGrid> {
     grid: { boxwidth: number; boxheight: number };
     task: (number | string)[][];
   }) {
-    if (task.length != task[0].length)
-      throw new Error("Sudoku grid must be square");
+    if (task.length != task[0].length) throw new Error("Sudoku grid must be square");
     const { boxwidth, boxheight } = grid;
     if (boxwidth * boxheight != task.length)
-      throw new Error(
-        "Sudoku boxes must have same number of cells as rows and columns",
-      );
+      throw new Error("Sudoku boxes must have same number of cells as rows and columns");
     const size = task.length;
 
     const areamap: { x: number; y: number }[][] = [];
@@ -48,13 +45,8 @@ export default class SudokuPuzzle extends Puzzle<SquareGrid> {
     this.grid.cellmap.map((cell, { x, y }) => {
       const hint = task[y][x];
       if (hint && hint != -1) cell.hint = hint;
-      this.addVariable(
-        cell,
-        hint && hint != -1 ? [parseInt(hint + "", 36)] : values.slice(),
-      );
-      areas[((x / boxwidth) | 0) + boxheight * ((y / boxheight) | 0)].push(
-        cell,
-      );
+      this.addVariable(cell, hint && hint != -1 ? [parseInt(hint + "", 36)] : values.slice());
+      areas[((x / boxwidth) | 0) + boxheight * ((y / boxheight) | 0)].push(cell);
     });
     [...this.grid.cellLines, ...areas].forEach((x) =>
       this.addConstraint(CONTAINS_ALL, x, values.slice()),

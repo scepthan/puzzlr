@@ -11,13 +11,7 @@ export default class YinYangPuzzle extends Puzzle {
   get renderSettings() {
     return { defaultScale: 24, funcs: ["edgearea", "binarygrey"] };
   }
-  constructor({
-    grid,
-    task,
-  }: {
-    grid: { width: number; height: number };
-    task: number[][];
-  }) {
+  constructor({ grid, task }: { grid: { width: number; height: number }; task: number[][] }) {
     super(SquareGrid.fromSize(grid.width, grid.height));
 
     this.grid.cellmap.map((cell, { x, y }) => {
@@ -33,17 +27,13 @@ export default class YinYangPuzzle extends Puzzle {
       const value = cells[0].value;
       if (value.length > 1) return true;
       for (let i = 0; i < cells.length; i++) {
-        if (cells[i].value.length > 1 || cells[i].value[0] != value[0])
-          return true;
+        if (cells[i].value.length > 1 || cells[i].value[0] != value[0]) return true;
       }
       return false;
     }
     function NOT_CHECKER_2x2(cells: PuzzleVariable[]) {
       for (let i = 0; i < cells.length; i++) {
-        if (
-          cells[(i + 1) % cells.length].value.some((v) => cells[i].valueHas(v))
-        )
-          return true;
+        if (cells[(i + 1) % cells.length].value.some((v) => cells[i].valueHas(v))) return true;
       }
       return false;
     }
@@ -56,13 +46,9 @@ export default class YinYangPuzzle extends Puzzle {
     );
 
     function BORDER_CONTIG(cells: PuzzleVariable[]) {
-      const values = new Set(
-        ([] as PuzzleVariableValue[]).concat(...cells.map((c) => c.value)),
-      );
+      const values = new Set(([] as PuzzleVariableValue[]).concat(...cells.map((c) => c.value)));
       for (const v of values) {
-        let indices = cells.map((c) =>
-          c.valueIs(v) ? 1 : c.valueHas(v) ? 0 : -1,
-        );
+        let indices = cells.map((c) => (c.valueIs(v) ? 1 : c.valueHas(v) ? 0 : -1));
         const index = indices.indexOf(1);
         if (index == -1) continue;
         indices = indices.slice(index).concat(indices.slice(0, index));
@@ -92,9 +78,7 @@ export default class YinYangPuzzle extends Puzzle {
           foundEdges.add(nextEdge);
           for (const cell of nextVert.cells.slice().reverse())
             if (cell != null && !cellLoop.includes(cell)) cellLoop.push(cell);
-          nextEdge = nextVert.edges.find(
-            (e) => e.isEdgeOfGrid && e != nextEdge,
-          )!;
+          nextEdge = nextVert.edges.find((e) => e.isEdgeOfGrid && e != nextEdge)!;
           nextVert = nextEdge.otherVert(nextVert);
         }
         this.addConstraint(BORDER_CONTIG, cellLoop);

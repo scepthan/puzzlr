@@ -11,13 +11,7 @@ export default class DominosaPuzzle extends Puzzle {
     return { defaultScale: 20, funcs: ["numhint", "edgedomino"] };
   }
   uniqueDominoes: Record<string, GridEdge[]> = {};
-  constructor({
-    grid,
-    task,
-  }: {
-    grid: { width: number; height: number };
-    task: number[][];
-  }) {
+  constructor({ grid, task }: { grid: { width: number; height: number }; task: number[][] }) {
     super(SquareGrid.fromSize(grid.width, grid.height));
 
     let maxNum = 0;

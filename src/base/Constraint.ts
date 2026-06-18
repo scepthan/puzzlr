@@ -17,8 +17,7 @@ export class Constraint {
     const constraint = new Constraint(id);
     constraint.name = check.name;
     constraint.global = !!check.global;
-    constraint.runCheck = (...extraArgs: any) =>
-      check(variables, ...targets, ...extraArgs);
+    constraint.runCheck = (...extraArgs: any) => check(variables, ...targets, ...extraArgs);
     constraint.variables = variables;
     constraint.targets = targets;
     return constraint;

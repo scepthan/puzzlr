@@ -67,8 +67,7 @@ export default class SquareGrid extends PuzzleGrid {
     const w = maxX - minX + 1,
       h = maxY - minY + 1;
     const grid = new SquareGrid(w, h);
-    for (const i in areas)
-      for (const { x, y } of areas[i]) grid.addCell(x - minX, y - minY, +i);
+    for (const i in areas) for (const { x, y } of areas[i]) grid.addCell(x - minX, y - minY, +i);
 
     grid.finalize();
     return grid;

@@ -3,18 +3,10 @@
     <v-sheet elevation="2" class="v-col-12 mb-4 pa-3" style="max-width: 720px">
       <v-row>
         <v-col cols="6">
-          <v-file-input
-            v-model="puzzleFile"
-            label="Puzzle input"
-            accept=".json"
-          />
+          <v-file-input v-model="puzzleFile" label="Puzzle input" accept=".json" />
         </v-col>
         <v-col cols="6">
-          <v-select
-            v-model="solveMode"
-            label="Solve mode"
-            :items="['fast', 'thorough']"
-          />
+          <v-select v-model="solveMode" label="Solve mode" :items="['fast', 'thorough']" />
         </v-col>
       </v-row>
       <div class="d-flex justify-space-between align-center">
@@ -24,10 +16,7 @@
         </div>
         <div>
           Need puzzles? Download examples from
-          <a
-            target="_blank"
-            href="https://github.com/ETHproductions/puzzlr/tree/main/src/test"
-          >
+          <a target="_blank" href="https://github.com/ETHproductions/puzzlr/tree/main/src/test">
             GitHub
           </a>
         </div>
@@ -39,23 +28,15 @@
       </v-sheet>
       <v-sheet elevation="2" class="pa-4" style="width: 480px">
         <div class="d-flex ga-2 mb-4">
-          <v-btn :disabled="!readyToAnalyze" @click="analyzePuzzle">
-            Analyze
-          </v-btn>
-          <v-btn :disabled="deductions.length == 0" @click="applyAllDeductions">
-            Apply All
-          </v-btn>
+          <v-btn :disabled="!readyToAnalyze" @click="analyzePuzzle"> Analyze </v-btn>
+          <v-btn :disabled="deductions.length == 0" @click="applyAllDeductions"> Apply All </v-btn>
         </div>
         <p>{{ statusText }}</p>
         <v-list density="compact" style="max-height: 65vh; overflow-y: auto">
           <v-list-item
             v-for="deduction in deductions"
             :key="deduction.index"
-            :title="
-              livePuzzle?.variables[deduction.variable] +
-              ' &ne; ' +
-              deduction.value
-            "
+            :title="livePuzzle?.variables[deduction.variable] + ' &ne; ' + deduction.value"
             @click="applyDeduction(deduction.index)"
             @mouseenter="hoveredDeduction = deduction"
             @mouseleave="hoveredDeduction = null"
@@ -68,10 +49,7 @@
 
 <script lang="ts" setup>
 import Puzzle from "@/base/Puzzle";
-import {
-  PuzzleVariableValue,
-  PuzzleVariableValues,
-} from "@/base/PuzzleVariable";
+import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
 import puzzleTypes from "@/base/puzzle-types";
 import { ref, watch } from "vue";
 
@@ -105,11 +83,7 @@ watch(puzzleFile, (file) => {
   const reader = new FileReader();
   reader.readAsText(file, "UTF-8");
   reader.onload = (e) => {
-    if (
-      !e.target ||
-      !e.target.result ||
-      e.target.result instanceof ArrayBuffer
-    ) {
+    if (!e.target || !e.target.result || e.target.result instanceof ArrayBuffer) {
       statusText.value = "Could not load file.";
       console.log("Could not load file.");
       return;
@@ -153,12 +127,8 @@ const resetPuzzle = () => {
 
   puzzleReady.value = true;
   const puzzleOptions = {
-    hintsTop: puzzleData.sums
-      ? puzzleData.sums.slice(0, puzzleData.grid.width)
-      : null,
-    hintsLeft: puzzleData.sums
-      ? puzzleData.sums.slice(puzzleData.grid.width)
-      : null,
+    hintsTop: puzzleData.sums ? puzzleData.sums.slice(0, puzzleData.grid.width) : null,
+    hintsLeft: puzzleData.sums ? puzzleData.sums.slice(puzzleData.grid.width) : null,
   };
   renderedGrid.value?.resetPuzzle(livePuzzle, puzzleOptions);
   deductions.value = [];
@@ -243,11 +213,10 @@ puzzleWorker.onmessage = (e) => {
       break;
     case "analysis":
       if (e.data.deductions.length == 0) {
-        if (livePuzzle?.variables.every((v) => v.value.length == 1))
+        if (livePuzzle?.variables.every((v) => v.value.length == 1)) {
           statusText.value = "Solved!";
-        else if (e.data.depth == 0) {
-          statusText.value =
-            "No more simplifications. Analyze again to search at depth 1.";
+        } else if (e.data.depth == 0) {
+          statusText.value = "No more simplifications. Analyze again to search at depth 1.";
           readyToAnalyze = true;
         } else {
           statusText.value = "Couldn't find any more depth-1 deductions.";

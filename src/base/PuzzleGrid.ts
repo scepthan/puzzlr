@@ -33,8 +33,7 @@ export default class PuzzleGrid {
    * changed.
    */
   constructor(w: number, h: number = w) {
-    if (!(w > 0) || !(h > 0))
-      throw new Error("Grid dimensions must be positive");
+    if (!(w > 0) || !(h > 0)) throw new Error("Grid dimensions must be positive");
     this.#width = w;
     this.#height = h;
     this.cellmap = new Array2D(1, 1);
@@ -51,11 +50,7 @@ export default class PuzzleGrid {
    * anything but recommended to be integer {x, y}
    * @returns new vertex
    */
-  addVert(
-    rpos: { x: number; y: number },
-    conns: GridVertex[] = [],
-    vpos: any = rpos,
-  ) {
+  addVert(rpos: { x: number; y: number }, conns: GridVertex[] = [], vpos: any = rpos) {
     if (this.#finalized) throw new Error("Cannot modify a finalized grid");
 
     const newVert = new GridVertex(this, rpos, vpos);
@@ -77,21 +72,11 @@ export default class PuzzleGrid {
    * @param noCell prevents creating a new cell if this edge
    * encloses a space in the plane or splits an existing cell
    */
-  addEdge(
-    fromVert: GridVertex,
-    toVert: GridVertex,
-    vpos?: any,
-    noCell: boolean = false,
-  ) {
+  addEdge(fromVert: GridVertex, toVert: GridVertex, vpos?: any, noCell: boolean = false) {
     if (this.#finalized) throw new Error("Cannot modify a finalized grid");
 
     if (fromVert.adjacent.includes(toVert))
-      throw new Error(
-        "Edge already exists between vertices " +
-          fromVert.id +
-          " and " +
-          toVert.id,
-      );
+      throw new Error("Edge already exists between vertices " + fromVert.id + " and " + toVert.id);
 
     if (typeof vpos != "object") {
       noCell = vpos;
@@ -149,19 +134,10 @@ export default class PuzzleGrid {
    * If this vertex is connected to the new edge, the old cell keeps the
    * first few clockwise vertices.
    */
-  #splitCell(
-    oldCell: GridCell,
-    fromInd: number,
-    toInd: number,
-    noNewCell?: boolean,
-  ) {
-    if (fromInd == 0 || (0 < toInd && toInd < fromInd))
-      [fromInd, toInd] = [toInd, fromInd];
+  #splitCell(oldCell: GridCell, fromInd: number, toInd: number, noNewCell?: boolean) {
+    if (fromInd == 0 || (0 < toInd && toInd < fromInd)) [fromInd, toInd] = [toInd, fromInd];
 
-    const newCellVerts = oldCell.verts.slice(
-      fromInd,
-      toInd || oldCell.verts.length,
-    );
+    const newCellVerts = oldCell.verts.slice(fromInd, toInd || oldCell.verts.length);
     if (toInd == 0) newCellVerts.push(oldCell.verts[0]);
 
     if (!noNewCell) this.#addCell(newCellVerts);
@@ -214,8 +190,7 @@ export default class PuzzleGrid {
    */
   #addCell(verts: GridVertex[]) {
     let minVertInd = 0;
-    for (let i = 1; i < verts.length; i++)
-      if (verts[i].id < verts[minVertInd].id) minVertInd = i;
+    for (let i = 1; i < verts.length; i++) if (verts[i].id < verts[minVertInd].id) minVertInd = i;
 
     verts = verts.slice(minVertInd).concat(verts.slice(0, minVertInd));
     const newCell = new GridCell(this, verts);
@@ -269,14 +244,8 @@ export default class PuzzleGrid {
    * @returns angle in [-pi, pi); straight = 0, cw > 0, ccw < 0
    */
   angleThroughVertex(vert1: GridVertex, pivot: GridVertex, vert2: GridVertex) {
-    const slope1 = Math.atan2(
-      pivot.rpos.y - vert1.rpos.y,
-      pivot.rpos.x - vert1.rpos.x,
-    );
-    const slope2 = Math.atan2(
-      vert2.rpos.y - pivot.rpos.y,
-      vert2.rpos.x - pivot.rpos.x,
-    );
+    const slope1 = Math.atan2(pivot.rpos.y - vert1.rpos.y, pivot.rpos.x - vert1.rpos.x);
+    const slope2 = Math.atan2(vert2.rpos.y - pivot.rpos.y, vert2.rpos.x - pivot.rpos.x);
     return ((slope2 - slope1 + 3 * Math.PI) % (2 * Math.PI)) - Math.PI;
   }
 

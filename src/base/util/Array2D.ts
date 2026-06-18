@@ -26,8 +26,7 @@ export default class Array2D<T> {
       this.data = width.data.slice();
     } else if (width instanceof Array) {
       const data = width;
-      if (data.length == 0)
-        throw new Error("Array2D cannot be created from empty array");
+      if (data.length == 0) throw new Error("Array2D cannot be created from empty array");
       return Array2D.from2D(data);
     } else {
       if (typeof width != "number" || typeof height != "number")
@@ -50,13 +49,8 @@ export default class Array2D<T> {
    * Create a new Array2D with a given width and height from a 1-dimensional
    * array of data.
    */
-  static from1D<T>(
-    data: T[],
-    width: number,
-    height: number = Math.ceil(data.length / width),
-  ) {
-    if (width <= 0 || width % 1 != 0)
-      throw new Error("Array2D width must be a positive integer");
+  static from1D<T>(data: T[], width: number, height: number = Math.ceil(data.length / width)) {
+    if (width <= 0 || width % 1 != 0) throw new Error("Array2D width must be a positive integer");
     if (height <= 0 || height % 1 != 0)
       throw new Error("Array2D height must be a positive integer");
 
@@ -75,8 +69,7 @@ export default class Array2D<T> {
    */
   static from2D<T>(data: T[][]) {
     const width = data.reduce((p, c) => Math.max(p, c.length), 0);
-    if (width == 0)
-      throw new Error("Array2D cannot be created from empty 2D array");
+    if (width == 0) throw new Error("Array2D cannot be created from empty 2D array");
 
     const arr = new Array2D<T>(width, data.length);
     for (let y = 0; y < arr.height; y++) {
@@ -166,13 +159,7 @@ export default class Array2D<T> {
    * 2. the location itself, with 2D position as .x/.y and 1D index as .i
    * 3. this Array2D
    */
-  modify(
-    func: (
-      item: T,
-      pos: { x: number; y: number; i: number },
-      arr: Array2D<T>,
-    ) => T,
-  ) {
+  modify(func: (item: T, pos: { x: number; y: number; i: number }, arr: Array2D<T>) => T) {
     for (let y = 0; y < this.#height; y++)
       for (let x = 0; x < this.#width; x++) {
         const i = y * this.#width + x;
@@ -187,13 +174,7 @@ export default class Array2D<T> {
    * 2. the location itself, with 2D position as .x/.y and 1D index as .i
    * 3. the cloned Array2D
    */
-  map<U>(
-    func: (
-      item: T,
-      pos: { x: number; y: number; i: number },
-      arr: Array2D<T>,
-    ) => U,
-  ) {
+  map<U>(func: (item: T, pos: { x: number; y: number; i: number }, arr: Array2D<T>) => U) {
     const arr = new Array2D<U>(this.width, this.height);
     for (let y = 0; y < this.#height; y++)
       for (let x = 0; x < this.#width; x++) {

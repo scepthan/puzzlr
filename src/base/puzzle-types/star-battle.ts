@@ -12,13 +12,7 @@ export default class StarBattlePuzzle extends Puzzle<SquareGrid> {
 
   areas: { x: number; y: number }[][];
 
-  constructor({
-    areas,
-    star_count,
-  }: {
-    areas: { x: number; y: number }[][];
-    star_count: number;
-  }) {
+  constructor({ areas, star_count }: { areas: { x: number; y: number }[][]; star_count: number }) {
     super(SquareGrid.fromAreas(areas));
     this.areas = areas;
 

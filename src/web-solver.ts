@@ -15,8 +15,7 @@ onmessage = (e) => {
       break;
     case "load":
       livePuzzle = null;
-      if (typeof message.data == "object" && "type" in message.data)
-        loadPuzzle(message.data);
+      if (typeof message.data == "object" && "type" in message.data) loadPuzzle(message.data);
       else postMessage({ status: "invalid" });
       break;
     case "solve":
@@ -54,10 +53,7 @@ function runPuzzle() {
     if (livePuzzle == null) return;
     if (Date.now() - last_update < 17) return;
     last_update = Date.now();
-    check_len = Math.max(
-      check_len,
-      ("" + livePuzzle.base_partsol.check_queue.length).length,
-    );
+    check_len = Math.max(check_len, ("" + livePuzzle.base_partsol.check_queue.length).length);
     const output =
       "Running... (" +
       livePuzzle.base_partsol.check_queue.length +
@@ -125,9 +121,7 @@ function analyzePuzzle() {
 }
 function applyDeduction(deduct_id: number) {
   if (livePuzzle == null) return;
-  livePuzzle.ps.deduct_queue.unshift(
-    ...livePuzzle.ps.deduct_queue.splice(deduct_id, 1),
-  );
+  livePuzzle.ps.deduct_queue.unshift(...livePuzzle.ps.deduct_queue.splice(deduct_id, 1));
   livePuzzle.next_deduct();
 }
 function applyAllDeductions() {

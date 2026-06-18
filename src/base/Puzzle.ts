@@ -1,10 +1,6 @@
 import { Constraint, ConstraintCheck } from "./Constraint.js";
 import PuzzleGrid from "./PuzzleGrid.js";
-import {
-  PuzzleVariable,
-  PuzzleVariableValue,
-  PuzzleVariableValues,
-} from "./PuzzleVariable.js";
+import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable.js";
 
 /**
  * The Puzzle class is the main entrypoint to the solving algorithm. A Puzzle
@@ -53,11 +49,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
    * @param must_be_unique if false, ignores this variable when checking
    * whether the puzzle is fully solved
    */
-  addVariable(
-    ref: PuzzleVariable,
-    value: PuzzleVariableValues,
-    must_be_unique: boolean = true,
-  ) {
+  addVariable(ref: PuzzleVariable, value: PuzzleVariableValues, must_be_unique: boolean = true) {
     ref.value = value;
     ref.var_id = this.variables.length;
     ref.must_be_unique = must_be_unique;
@@ -77,12 +69,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     variables: T[],
     ...targets: any[]
   ) {
-    const constraint = Constraint.build(
-      this.constraints.length,
-      check,
-      variables,
-      targets,
-    );
+    const constraint = Constraint.build(this.constraints.length, check, variables, targets);
     this.constraints.push(constraint);
     for (const variable of variables) variable.constraints.push(constraint);
   }
@@ -91,9 +78,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     if (this.options.debug < debug_level + +(this.ps.depth > 0)) return;
     if (typeof args[0] == "function") args = args[0]();
     args[0] =
-      this.ps.assumptions
-        .map((x) => "V" + x.variable.var_id + "=" + x.value)
-        .join(";") +
+      this.ps.assumptions.map((x) => "V" + x.variable.var_id + "=" + x.value).join(";") +
       " " +
       args[0];
     console.log.apply(null, args);
@@ -111,17 +96,10 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
    *   - 'thorough': check every variable before making the next deduction
    *   - 'fast': make the first deduction found
    */
-  initiate_solve(options: {
-    max_depth: number;
-    debug?: number;
-    mode?: string;
-  }) {
+  initiate_solve(options: { max_depth: number; debug?: number; mode?: string }) {
     if (typeof options.max_depth != "number")
-      throw new Error(
-        "Puzzle.solve(): no or invalid max_depth parameter provided",
-      );
-    if (!["fast", "thorough"].includes(options.mode ?? ""))
-      options.mode = "thorough";
+      throw new Error("Puzzle.solve(): no or invalid max_depth parameter provided");
+    if (!["fast", "thorough"].includes(options.mode ?? "")) options.mode = "thorough";
     if (!("debug" in options)) options.debug = 0;
     this.options = options;
     this.global_stats = {
@@ -203,11 +181,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     ) {
       if (!this.next_deduct()) return false;
     } else {
-      this.debug_log(
-        2,
-        "No more depth-" + this.current_depth,
-        "deductions found.",
-      );
+      this.debug_log(2, "No more depth-" + this.current_depth, "deductions found.");
       return false;
     }
     return true;
@@ -223,29 +197,14 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     const variable = check.variable;
     const values = variable.value;
     const constraint = check.constraint;
-    if (
-      this.options.mode == "thorough" &&
-      values.length == 1 &&
-      !constraint.global
-    )
-      return true;
-    this.debug_log(3, () => [
-      " Checking",
-      variable.toString(),
-      "on",
-      constraint.toString(),
-    ]);
+    if (this.options.mode == "thorough" && values.length == 1 && !constraint.global) return true;
+    this.debug_log(3, () => [" Checking", variable.toString(), "on", constraint.toString()]);
 
     for (const value of values) {
       variable.value = [value];
       this.global_stats.total_constraint_checks++;
       if (constraint.runCheck(variable)) continue;
-      if (
-        this.ps.deduct_queue.find(
-          (d) => d.variable == variable && d.value == value,
-        )
-      )
-        continue;
+      if (this.ps.deduct_queue.find((d) => d.variable == variable && d.value == value)) continue;
 
       this.ps.deduct_queue.push({ variable, value, constraint });
       this.debug_log(1, () => [
@@ -259,22 +218,18 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         values.every(
           (v) =>
             ++this.global_stats.total_contradiction_checks &&
-            this.ps.deduct_queue.find(
-              (d) => d.variable == variable && d.value == v,
-            ),
+            this.ps.deduct_queue.find((d) => d.variable == variable && d.value == v),
         )
       ) {
         this.debug_log(1, "  Contradiction! Aborting solve...");
         this.ps.status = "contradiction";
-        if (typeof this.options.on_contradict == "function")
-          this.options.on_contradict(variable);
+        if (typeof this.options.on_contradict == "function") this.options.on_contradict(variable);
         return false;
       }
     }
 
     variable.value = values;
-    if (typeof this.options.on_check == "function")
-      this.options.on_check(check);
+    if (typeof this.options.on_check == "function") this.options.on_check(check);
     return true;
   }
 
@@ -319,26 +274,17 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         "cannot have value",
         deduction.value,
         "due to",
-        deduction.constraint
-          ? deduction.constraint.toString()
-          : "future contradiction",
+        deduction.constraint ? deduction.constraint.toString() : "future contradiction",
       ]);
     variable.value.splice(variable.value.indexOf(deduction.value), 1);
-    if (typeof this.options.on_deduct == "function")
-      this.options.on_deduct(deduction);
+    if (typeof this.options.on_deduct == "function") this.options.on_deduct(deduction);
     if (variable.value.length == 1) {
-      this.debug_log(1, () => [
-        "  " + variable.toString(),
-        "has value",
-        variable.value[0],
-      ]);
-      if (typeof this.options.on_value == "function")
-        this.options.on_value(variable);
+      this.debug_log(1, () => ["  " + variable.toString(), "has value", variable.value[0]]);
+      if (typeof this.options.on_value == "function") this.options.on_value(variable);
     } else if (variable.value.length == 0) {
       this.debug_log(1, "  Contradiction! Aborting solve...");
       this.ps.status = "contradiction";
-      if (typeof this.options.on_contradict == "function")
-        this.options.on_contradict(variable);
+      if (typeof this.options.on_contradict == "function") this.options.on_contradict(variable);
       return false;
     }
 
@@ -348,9 +294,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         : constraint.variables.filter((v) => v.value.length > 1))
         if (
           !this.ps.check_queue.some(
-            (x) =>
-              x.variable.var_id == subvar.var_id &&
-              x.constraint.id == constraint.id,
+            (x) => x.variable.var_id == subvar.var_id && x.constraint.id == constraint.id,
           )
         )
           this.ps.check_queue.push({ variable: subvar, constraint });
@@ -373,9 +317,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
           continue;
         if (
           new_partsol.assumptions.some((a) =>
-            this.ps.deductions_made.some(
-              (d) => d.variable == a.variable && d.value == a.value,
-            ),
+            this.ps.deductions_made.some((d) => d.variable == a.variable && d.value == a.value),
           )
         )
           continue;
@@ -400,8 +342,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         parent_partsols.findIndex(
           (ps, i) =>
             ps.assumptions[0].variable.var_id >
-            parent_partsols[(i + 1) % parent_partsols.length].assumptions[0]
-              .variable.var_id,
+            parent_partsols[(i + 1) % parent_partsols.length].assumptions[0].variable.var_id,
         ) + 1;
       parent_partsols = parent_partsols
         .slice(first_index)
@@ -410,9 +351,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     // Create partsols for all remaining variable/value pairs
     for (const partsol of parent_partsols) {
       for (const variable of this.variables.slice(
-        this.current_depth == 1
-          ? 0
-          : partsol.assumptions.slice(-1)[0].variable.var_id + 1,
+        this.current_depth == 1 ? 0 : partsol.assumptions.slice(-1)[0].variable.var_id + 1,
       )) {
         const values = this.base_partsol.values[variable.var_id];
         if (values.length == 1) continue;
@@ -468,9 +407,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         // handle separately to save processing time
         this.debug_log(2, () => [
           "Contradiction in {",
-          new_partsol.assumptions
-            .map((a) => a.variable.toString() + " => " + a.value)
-            .join("; "),
+          new_partsol.assumptions.map((a) => a.variable.toString() + " => " + a.value).join("; "),
           "}",
         ]);
       } else {
@@ -478,9 +415,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
         current_partsols.push(new_partsol);
         this.debug_log(2, () => [
           "Done with {",
-          new_partsol.assumptions
-            .map((a) => a.variable.toString() + " => " + a.value)
-            .join("; "),
+          new_partsol.assumptions.map((a) => a.variable.toString() + " => " + a.value).join("; "),
           "}",
         ]);
       }
@@ -516,11 +451,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     }
     if (this.options.max_depth <= 0) {
       this.ps.status = "unsolvable";
-      this.debug_log(
-        0,
-        "Could not solve with max depth",
-        this.options.max_depth,
-      );
+      this.debug_log(0, "Could not solve with max depth", this.options.max_depth);
       return true;
     }
     return false;
@@ -551,17 +482,14 @@ class PartialSolution {
     this.deductions_made = [];
 
     this.values = [];
-    for (const variable of this.puzzle.variables)
-      this.values.push(variable.value.slice());
+    for (const variable of this.puzzle.variables) this.values.push(variable.value.slice());
 
     this.parents = [];
     this.children = [];
     if (this.depth > 0) {
       this.parents = puzzle.partsols_by_depth[this.depth - 1].filter((p) =>
         p.assumptions.every((a) =>
-          assumptions.some(
-            (b) => a.variable == b.variable && a.value == b.value,
-          ),
+          assumptions.some((b) => a.variable == b.variable && a.value == b.value),
         ),
       );
       this.merge_from_parents();
@@ -571,16 +499,14 @@ class PartialSolution {
 
   save() {
     this.values = [];
-    for (const variable of this.puzzle.variables)
-      this.values.push(variable.value);
+    for (const variable of this.puzzle.variables) this.values.push(variable.value);
   }
 
   restore(save: boolean) {
     if (save) this.puzzle.ps.save();
 
     this.puzzle.ps = this;
-    for (let i = 0; i < this.values.length; i++)
-      this.puzzle.variables[i].value = this.values[i];
+    for (let i = 0; i < this.values.length; i++) this.puzzle.variables[i].value = this.values[i];
     this.puzzle.global_stats.total_context_switches++;
   }
 
@@ -593,9 +519,7 @@ class PartialSolution {
 
   merge_from_parents() {
     const all_partsols = [...this.parents, this];
-    all_partsols.sort(
-      (a, b) => b.deductions_made.length - a.deductions_made.length,
-    );
+    all_partsols.sort((a, b) => b.deductions_made.length - a.deductions_made.length);
     const new_base = all_partsols.shift()!;
     const deduct_lists = all_partsols.map((ps) => ps.deductions_made.slice());
 
@@ -603,17 +527,15 @@ class PartialSolution {
       this.puzzle.global_stats.partsol_rebases++;
       this.debug_log(2, () => [
         "Rebasing on {",
-        new_base.assumptions
-          .map((a) => a.variable.toString() + " => " + a.value)
-          .join("; ") || "root",
+        new_base.assumptions.map((a) => a.variable.toString() + " => " + a.value).join("; ") ||
+          "root",
         "}",
       ]);
       this.deductions_made = new_base.deductions_made.slice();
       this.values = new_base.values.map((v) => v.slice());
     }
 
-    for (const list of deduct_lists)
-      for (const deduction of list) this.try_deduction(deduction);
+    for (const list of deduct_lists) for (const deduction of list) this.try_deduction(deduction);
   }
 
   find_child_agreements(assumptions: Assumption[]) {
@@ -624,29 +546,22 @@ class PartialSolution {
       ps.assumptions.some((a) => a.variable == missing_variable),
     );
     // Return early if a child hasn't finished running yet
-    if (!valid_children.every((ps) => ps.done || ps.status == "contradiction"))
-      return false;
+    if (!valid_children.every((ps) => ps.done || ps.status == "contradiction")) return false;
 
     const shared_assumptions = assumptions.map((a) =>
       valid_children.every((ps) =>
-        ps.assumptions.some(
-          (b) => a.variable == b.variable && a.value == b.value,
-        ),
+        ps.assumptions.some((b) => a.variable == b.variable && a.value == b.value),
       )
         ? a
         : { variable: a.variable, value: undefined },
     );
 
-    valid_children = valid_children.filter(
-      (ps) => ps.status != "contradiction",
-    );
+    valid_children = valid_children.filter((ps) => ps.status != "contradiction");
     if (valid_children.length == 0) {
       this.status = "contradiction";
       this.debug_log(2, () => [
         "Universal contradiction found in {",
-        this.assumptions
-          .map((a) => a.variable.toString() + " => " + a.value)
-          .join("; "),
+        this.assumptions.map((a) => a.variable.toString() + " => " + a.value).join("; "),
         "}",
       ]);
       return true;
@@ -659,8 +574,7 @@ class PartialSolution {
       for (const deduction of deductions) {
         if (
           partsol.deductions_made.some(
-            (d) =>
-              d.variable == deduction.variable && d.value == deduction.value,
+            (d) => d.variable == deduction.variable && d.value == deduction.value,
           )
         )
           new_deductions.push(deduction);
@@ -679,11 +593,7 @@ class PartialSolution {
         successful_deductions.length,
         "agreements found in {",
         shared_assumptions
-          .map(
-            (a) =>
-              a.variable.toString() +
-              (a.value == undefined ? "" : " => " + a.value),
-          )
+          .map((a) => a.variable.toString() + (a.value == undefined ? "" : " => " + a.value))
           .join("; "),
         "}",
       ]);
@@ -716,9 +626,7 @@ class PartialSolution {
     if (
       !this.deduct_queue
         .concat(this.deductions_made)
-        .some(
-          (d) => d.variable == deduction.variable && d.value == deduction.value,
-        )
+        .some((d) => d.variable == deduction.variable && d.value == deduction.value)
     ) {
       this.deduct_queue.push({
         variable: deduction.variable,
