@@ -1,0 +1,29 @@
+name: norinori
+
+renderSettings:
+  defaultScale: 30
+  funcs:
+    - edgearea
+    - binarygrey
+
+hints:
+  - type: areas
+
+variables:
+  required:
+    - on: cells
+      value: [0, 1]
+
+constraints:
+  - on: areas
+    check:
+      equals:
+        - sum: area.cells
+        - 2
+  - on: cells
+    check:
+      if:
+        - equals: [cell, 1]
+        - equals:
+            - sum: cell.adjacent_edge
+            - 1
