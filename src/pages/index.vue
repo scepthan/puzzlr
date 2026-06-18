@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center">
-    <v-sheet elevation="2" class="v-col-12 mb-4 pa-3" style="max-width: 720px">
+    <v-sheet elevation="2" class="v-col-12 mb-4 pa-3 w-100" style="max-width: 720px">
       <v-row>
         <v-col cols="6">
           <v-file-input v-model="puzzleFile" label="Puzzle input" accept=".json" />
@@ -10,7 +10,7 @@
         </v-col>
       </v-row>
       <div class="d-flex justify-space-between align-center">
-        <div class="d-flex ga-2 mr-3">
+        <div class="d-flex ga-2">
           <v-btn :disabled="!puzzleReady" @click="startSolve">Solve</v-btn>
           <v-btn :disabled="!puzzleReady" @click="resetPuzzle">Reset</v-btn>
         </div>
