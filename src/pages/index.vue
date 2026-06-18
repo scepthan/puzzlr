@@ -66,7 +66,7 @@ const puzzleReady = ref<boolean>(false);
 
 let puzzleData: any = null;
 let puzzleType: any = null;
-let livePuzzle: Puzzle | null = null;
+const livePuzzle = ref<Puzzle | null>(null);
 const renderedGrid = ref();
 let renderMessage: any = null;
 
@@ -116,7 +116,7 @@ watch(puzzleFile, (file) => {
 
 const resetPuzzle = () => {
   try {
-    livePuzzle = new puzzleType(puzzleData);
+    livePuzzle.value = new puzzleType(puzzleData);
     puzzleWorker.postMessage({ command: "load", data: puzzleData });
     console.log("Data loaded.");
   } catch (e) {
@@ -130,7 +130,7 @@ const resetPuzzle = () => {
     hintsTop: puzzleData.sums ? puzzleData.sums.slice(0, puzzleData.grid.width) : null,
     hintsLeft: puzzleData.sums ? puzzleData.sums.slice(puzzleData.grid.width) : null,
   };
-  renderedGrid.value?.resetPuzzle(livePuzzle, puzzleOptions);
+  renderedGrid.value?.resetPuzzle(livePuzzle.value, puzzleOptions);
   deductions.value = [];
   readyToAnalyze = true;
   hoveredDeduction.value = null;
@@ -152,13 +152,13 @@ const analyzePuzzle = () => {
 };
 
 const applyDeduction = (deduct_id: number) => {
-  if (!livePuzzle) return;
+  if (!livePuzzle.value) return;
 
   const [deduction] = deductions.value.splice(deduct_id, 1);
   deductions.value = deductions.value.map((d, i) => ({ ...d, index: i }));
   hoveredDeduction.value = deductions.value[deduction.index] ?? null;
 
-  const variable = livePuzzle.variables[deduction.variable];
+  const variable = livePuzzle.value.variables[deduction.variable];
   variable.value.splice(variable.value.indexOf(deduction.value), 1);
 
   renderedGrid.value.renderPuzzle();
@@ -166,10 +166,10 @@ const applyDeduction = (deduct_id: number) => {
   puzzleWorker.postMessage({ command: "applydeduction", deduct_id });
 };
 const applyAllDeductions = () => {
-  if (!livePuzzle) return;
+  if (!livePuzzle.value) return;
 
   for (const deduction of deductions.value) {
-    const variable = livePuzzle.variables[deduction.variable];
+    const variable = livePuzzle.value.variables[deduction.variable];
     variable.value.splice(variable.value.indexOf(deduction.value), 1);
   }
 
@@ -188,7 +188,7 @@ const renderPuzzle = () => {
   renderMessage = null;
   const answer: PuzzleVariableValues[] = data.answer;
   answer.forEach((v, i) => {
-    livePuzzle!.variables[i].value = v;
+    livePuzzle.value!.variables[i].value = v;
   });
   renderedGrid.value.renderPuzzle();
   statusText.value = data.output;
@@ -213,7 +213,7 @@ puzzleWorker.onmessage = (e) => {
       break;
     case "analysis":
       if (e.data.deductions.length == 0) {
-        if (livePuzzle?.variables.every((v) => v.value.length == 1)) {
+        if (livePuzzle.value?.variables.every((v) => v.value.length == 1)) {
           statusText.value = "Solved!";
         } else if (e.data.depth == 0) {
           statusText.value = "No more simplifications. Analyze again to search at depth 1.";
