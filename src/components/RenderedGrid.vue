@@ -6,7 +6,6 @@
 import { GridCell, GridEdge, PuzzleGrid } from "@/base";
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariable, PuzzleVariableValues } from "@/base/PuzzleVariable";
-import { onMounted, ref } from "vue";
 
 const ns = "http://www.w3.org/2000/svg";
 

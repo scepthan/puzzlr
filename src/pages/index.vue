@@ -51,7 +51,6 @@
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
 import puzzleTypes from "@/base/puzzle-types";
-import { ref, watch } from "vue";
 
 type Deduction = {
   variable: number;

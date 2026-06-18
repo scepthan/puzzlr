@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "src/**/*.vue"],
+  "include": ["src/**/*", "src/**/*.vue", "components.d.ts", "auto-imports.d.ts"],
   "exclude": ["dist", "node_modules", "cypress"],
   "references": [
     {

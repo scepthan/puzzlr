@@ -1,5 +1,6 @@
 // Plugins
 import Vue from "@vitejs/plugin-vue";
+import AutoImport from "unplugin-auto-import/vite";
 import ViteFonts from "unplugin-fonts/vite";
 import Components from "unplugin-vue-components/vite";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
@@ -33,6 +34,9 @@ export default defineConfig({
           },
         ],
       },
+    }),
+    AutoImport({
+      imports: ["vue", "vue-router"],
     }),
   ],
   define: { "process.env": {} },
