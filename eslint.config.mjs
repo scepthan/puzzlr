@@ -1,13 +1,11 @@
 // @ts-check
-import globals from "globals";
-import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import tsEslint from "typescript-eslint";
 import pluginVue from "eslint-plugin-vue";
 import eslintConfigPrettier from "eslint-config-prettier";
 
-export default tsEslint.config({
+export default defineConfig({
   extends: [
-    eslint.configs.recommended,
     ...tsEslint.configs.recommended,
     ...pluginVue.configs["flat/recommended"],
     eslintConfigPrettier,
@@ -15,7 +13,6 @@ export default tsEslint.config({
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: "module",
-    globals: globals.node,
     parserOptions: {
       parser: tsEslint.parser,
       project: "./tsconfig.json",
