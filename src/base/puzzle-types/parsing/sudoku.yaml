@@ -9,7 +9,7 @@ renderSettings:
 
 inputs:
   boxes: true
-  task:
+  task_cells:
     type: num_36
     empty_value: 0
 
