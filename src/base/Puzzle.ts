@@ -1,4 +1,5 @@
 import { Constraint, ConstraintCheck } from "./Constraint.js";
+import { RenderSettings } from "./puzzle-types/parsing/PuzzleTypeDefinition.js";
 import PuzzleGrid from "./PuzzleGrid.js";
 import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable.js";
 
@@ -30,15 +31,19 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
     const _super = <typeof Puzzle>this.constructor;
     return _super.type;
   }
+  private _renderSettings: RenderSettings = { defaultScale: 30, funcs: ["edgearea", "binarygrey"] };
   get renderSettings() {
-    return { defaultScale: 30, funcs: ["edgearea", "binarygrey"] };
+    return this._renderSettings;
   }
 
   /**
    * Takes a grid and begins the process of creating a puzzle.
    */
-  constructor(grid: TGrid) {
+  constructor(grid: TGrid, renderSettings?: RenderSettings) {
     this.grid = grid;
+    if (renderSettings) {
+      this._renderSettings = renderSettings;
+    }
   }
 
   /**

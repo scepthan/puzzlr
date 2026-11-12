@@ -1,4 +1,4 @@
-import { PuzzleGrid, GridEdge, GridVertex } from "./index.js";
+import { GridEdge, GridVertex, PuzzleGrid } from "./index.js";
 import { PuzzleVariable } from "./PuzzleVariable.js";
 
 export default class GridCell extends PuzzleVariable {
@@ -10,7 +10,7 @@ export default class GridCell extends PuzzleVariable {
 
   // Cache of adjacent cells, in format { cell, type: 'edge' | 'vert' }
   #adjacent: { cell: GridCell; type: string }[] = [];
-  area_id: any;
+  area_id: number | null = null;
 
   hint?: number | string;
   thermoIndex?: number;

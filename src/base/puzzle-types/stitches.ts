@@ -40,7 +40,7 @@ export default class StitchesPuzzle extends Puzzle<SquareGrid> {
     for (const edge of this.grid.edges)
       if (edge.isInnerEdge()) {
         const id = [edge.leftCell.area_id, edge.rightCell.area_id];
-        if (id[0] == id[1]) continue;
+        if (id[0] === null || id[1] === null || id[0] === id[1]) continue;
         if (id[0] > id[1]) id.reverse();
         this.areaEdges[id + ""].push(edge);
         this.addVariable(edge, [0, 1]);

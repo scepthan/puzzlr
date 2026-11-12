@@ -1,6 +1,6 @@
 import GridCell from "../GridCell.js";
 import Puzzle from "../Puzzle.js";
-import { PuzzleVariable, PuzzleVariableValue } from "../PuzzleVariable.js";
+import { PuzzleVariable } from "../PuzzleVariable.js";
 import { CONTIG_CELL_ALL } from "../generic-constraints.js";
 import SquareGrid from "../grids/SquareGrid.js";
 
@@ -46,7 +46,7 @@ export default class YinYangPuzzle extends Puzzle {
     );
 
     function BORDER_CONTIG(cells: PuzzleVariable[]) {
-      const values = new Set(([] as PuzzleVariableValue[]).concat(...cells.map((c) => c.value)));
+      const values = new Set(cells.flatMap((c) => c.value));
       for (const v of values) {
         let indices = cells.map((c) => (c.valueIs(v) ? 1 : c.valueHas(v) ? 0 : -1));
         const index = indices.indexOf(1);
