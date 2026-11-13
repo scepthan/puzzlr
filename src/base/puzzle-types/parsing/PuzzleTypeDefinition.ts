@@ -4,7 +4,7 @@ export interface PuzzleTypeDefinition {
   name: string;
   renderSettings: RenderSettings;
   inputs: PuzzleInputsDefinition;
-  variables: PuzzleVariablesDefinition;
+  variables: PuzzleVariableDefinition[];
   constraints: PuzzleConstraintDefinition[];
 }
 
@@ -16,20 +16,23 @@ export interface RenderSettings {
 export interface PuzzleInputsDefinition {
   areas?: boolean;
   boxes?: boolean;
-  task_cells?: PuzzleTaskDefinition;
+  hint_cells?: PuzzleHintsDefinition;
+  given_cells?: PuzzleGivensDefinition;
 }
-export interface PuzzleTaskDefinition {
+export interface PuzzleHintsDefinition {
+  type: string;
+  empty_value?: PuzzleVariableValue;
+  variable_overlap?: boolean;
+}
+export interface PuzzleGivensDefinition {
   type: string;
   empty_value?: PuzzleVariableValue;
 }
 
-export interface PuzzleVariablesDefinition {
-  required: PuzzleVariableDefinition[];
-  optional?: PuzzleVariableDefinition[];
-}
 export interface PuzzleVariableDefinition {
   on: string;
   value: string | PuzzleVariableValue[];
+  required?: boolean;
 }
 
 export interface PuzzleConstraintDefinition {

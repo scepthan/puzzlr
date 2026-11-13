@@ -10,9 +10,9 @@ inputs:
   areas: true
 
 variables:
-  required:
-    - on: cells
-      value: [0, 1]
+  - on: cells
+    value: [0, 1]
+    required: true
 
 constraints:
   - on: areas

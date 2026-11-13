@@ -1,0 +1,23 @@
+name: mosaic
+
+renderSettings:
+  defaultScale: 36
+  funcs: edgeplain, binarygrey, numhint
+
+inputs:
+  hint_cells:
+    type: number
+    empty_value: -1
+    variable_overlap: true
+
+variables:
+  - on: cells
+    value: [0, 1]
+    required: true
+
+constraints:
+  - on: hinted_cells
+    check:
+      equals:
+        - sum: cell.neighborhood_all
+        - hint

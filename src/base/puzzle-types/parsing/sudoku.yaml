@@ -9,14 +9,14 @@ renderSettings:
 
 inputs:
   boxes: true
-  task_cells:
+  given_cells:
     type: num_36
     empty_value: 0
 
 variables:
-  required:
-    - on: cells
-      value: num_1_to_size
+  - on: cells
+    value: num_1_to_size
+    required: true
 
 constraints:
   - on: cell_lines, areas
