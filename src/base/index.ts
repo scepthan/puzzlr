@@ -1,7 +1,6 @@
-import GridCell from "./GridCell.js";
-import GridEdge from "./GridEdge.js";
-import GridVertex from "./GridVertex.js";
+import { Constraint } from "./Constraint.js";
 import Puzzle from "./Puzzle.js";
-import PuzzleGrid from "./PuzzleGrid.js";
+import { PuzzleVariable } from "./PuzzleVariable.js";
 
-export { GridCell, GridEdge, GridVertex, Puzzle, PuzzleGrid };
+export * from "./grids/index.js";
+export { Constraint, Puzzle, PuzzleVariable };

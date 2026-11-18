@@ -1,8 +1,8 @@
-import GridCell from "../GridCell.js";
+import { CONTIG_CELL_ALL } from "../generic-constraints.js";
+import GridCell from "../grids/GridCell.js";
+import SquareGrid from "../grids/SquareGrid.js";
 import Puzzle from "../Puzzle.js";
 import { PuzzleVariable } from "../PuzzleVariable.js";
-import { CONTIG_CELL_ALL } from "../generic-constraints.js";
-import SquareGrid from "../grids/SquareGrid.js";
 
 export default class YinYangPuzzle extends Puzzle {
   static get type() {

@@ -1,7 +1,6 @@
-import GridEdge from "../GridEdge.js";
 import Puzzle from "../Puzzle.js";
 import { SUM_EQUALS, SUM_EQUALS_IF } from "../generic-constraints.js";
-import SquareGrid from "../grids/SquareGrid.js";
+import { GridEdge, SquareGrid } from "../grids/index.js";
 
 export default class StitchesPuzzle extends Puzzle<SquareGrid> {
   static get type() {

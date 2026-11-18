@@ -1,7 +1,6 @@
-import GridEdge from "../GridEdge.js";
 import Puzzle from "../Puzzle.js";
 import { SUM_EQUALS } from "../generic-constraints.js";
-import SquareGrid from "../grids/SquareGrid.js";
+import { GridEdge, SquareGrid } from "../grids/index.js";
 
 export default class DominosaPuzzle extends Puzzle {
   static get type() {

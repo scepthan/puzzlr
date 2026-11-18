@@ -1,5 +1,5 @@
-import { GridEdge, GridVertex, PuzzleGrid } from "./index.js";
-import { PuzzleVariable } from "./PuzzleVariable.js";
+import { GridEdge, GridVertex, PuzzleGrid } from "../index.js";
+import { PuzzleVariable } from "../PuzzleVariable.js";
 
 export default class GridCell extends PuzzleVariable {
   grid: PuzzleGrid;

@@ -1,6 +1,6 @@
 import { Constraint, ConstraintCheck } from "./Constraint.js";
-import { RenderSettings } from "./puzzle-types/parsing/PuzzleTypeDefinition.js";
-import PuzzleGrid from "./PuzzleGrid.js";
+import PuzzleGrid from "./grids/PuzzleGrid.js";
+import { RenderSettings } from "./parsing/PuzzleTypeDefinition.js";
 import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable.js";
 
 /**

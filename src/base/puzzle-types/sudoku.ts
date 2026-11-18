@@ -1,7 +1,7 @@
-import GridCell from "../GridCell.js";
-import Puzzle from "../Puzzle.js";
 import { CONTAINS_ALL } from "../generic-constraints.js";
+import GridCell from "../grids/GridCell.js";
 import SquareGrid from "../grids/SquareGrid.js";
+import Puzzle from "../Puzzle.js";
 
 export default class SudokuPuzzle extends Puzzle<SquareGrid> {
   static get type() {
