@@ -1,4 +1,4 @@
-import { PuzzleVariable } from "./PuzzleVariable.js";
+import { PuzzleVariable } from "./PuzzleVariable";
 
 export class Constraint {
   id: number;

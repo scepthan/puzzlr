@@ -1,11 +1,11 @@
-import DominosaPuzzle from "./dominosa.js";
-import NorinoriPuzzle from "./norinori.js";
-import SlitherlinkPuzzle from "./slitherlink.js";
-import StarBattlePuzzle from "./star-battle.js";
-import StitchesPuzzle from "./stitches.js";
-import SudokuPuzzle from "./sudoku.js";
-import ThermometersPuzzle from "./thermometers.js";
-import YinYangPuzzle from "./yin-yang.js";
+import DominosaPuzzle from "./dominosa";
+import NorinoriPuzzle from "./norinori";
+import SlitherlinkPuzzle from "./slitherlink";
+import StarBattlePuzzle from "./star-battle";
+import StitchesPuzzle from "./stitches";
+import SudokuPuzzle from "./sudoku";
+import ThermometersPuzzle from "./thermometers";
+import YinYangPuzzle from "./yin-yang";
 
 const puzzleTypes = [
   DominosaPuzzle,

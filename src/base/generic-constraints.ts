@@ -1,5 +1,5 @@
-import { GridCell, GridEdge } from "./index.js";
-import { PuzzleVariable, PuzzleVariableValue } from "./PuzzleVariable.js";
+import { GridCell, GridEdge } from ".";
+import { PuzzleVariable, PuzzleVariableValue } from "./PuzzleVariable";
 
 function find_sums(vars: PuzzleVariable[]) {
   let sums = new Set([0]);

@@ -1,7 +1,7 @@
-import GridCell from "./GridCell.js";
-import GridEdge from "./GridEdge.js";
-import GridVertex from "./GridVertex.js";
-import PuzzleGrid from "./PuzzleGrid.js";
-import SquareGrid from "./SquareGrid.js";
+import GridCell from "./GridCell";
+import GridEdge from "./GridEdge";
+import GridVertex from "./GridVertex";
+import PuzzleGrid from "./PuzzleGrid";
+import SquareGrid from "./SquareGrid";
 
 export { GridCell, GridEdge, GridVertex, PuzzleGrid, SquareGrid };

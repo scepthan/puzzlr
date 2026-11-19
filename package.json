@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "build-node": "tsc --project tsconfig.npm.json",
+    "build-node": "tsc --project tsconfig.npm.json && tsc-alias -p tsconfig.npm.json",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint --fix .",
     "format": "prettier --write src/"
@@ -48,6 +48,7 @@
     "eslint-plugin-vue": "^10.9.2",
     "prettier": "^3.8.4",
     "sass": "^1.101.0",
+    "tsc-alias": "^1.9.10",
     "typescript": "^6.0.3",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-fonts": "^2.0.0",

@@ -3,8 +3,8 @@
     "target": "ESNext",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "rootDir": "./src/base",
-    "outDir": "lib/base",
+    "rootDir": "./src",
+    "outDir": "./lib",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
@@ -19,6 +19,9 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "skipLibCheck": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
   },
   "include": ["src/base/**/*"],
   "exclude": ["dist", "node_modules", "cypress"]

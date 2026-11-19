@@ -1,8 +1,8 @@
-import { SUM_EQUALS } from "../generic-constraints.js";
-import GridCell from "../grids/GridCell.js";
-import SquareGrid from "../grids/SquareGrid.js";
-import Puzzle from "../Puzzle.js";
-import { PuzzleVariable } from "../PuzzleVariable.js";
+import { SUM_EQUALS } from "../generic-constraints";
+import GridCell from "../grids/GridCell";
+import SquareGrid from "../grids/SquareGrid";
+import Puzzle from "../Puzzle";
+import { PuzzleVariable } from "../PuzzleVariable";
 
 export default class ThermometersPuzzle extends Puzzle<SquareGrid> {
   static get type() {

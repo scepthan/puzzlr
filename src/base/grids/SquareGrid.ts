@@ -1,5 +1,5 @@
-import { PuzzleGrid, GridCell, GridEdge, GridVertex } from "../index.js";
-import Array2D from "../util/Array2D.js";
+import { GridCell, GridEdge, GridVertex, PuzzleGrid } from "..";
+import Array2D from "../util/Array2D";
 
 export default class SquareGrid extends PuzzleGrid {
   areamap: Array2D<number | null>;

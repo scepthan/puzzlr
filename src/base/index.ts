@@ -1,6 +1,6 @@
-import { Constraint } from "./Constraint.js";
-import Puzzle from "./Puzzle.js";
-import { PuzzleVariable } from "./PuzzleVariable.js";
+import { Constraint } from "./Constraint";
+import Puzzle from "./Puzzle";
+import { PuzzleVariable } from "./PuzzleVariable";
 
-export * from "./grids/index.js";
+export * from "./grids";
 export { Constraint, Puzzle, PuzzleVariable };

@@ -1,7 +1,7 @@
-import { Constraint, ConstraintCheck } from "./Constraint.js";
-import PuzzleGrid from "./grids/PuzzleGrid.js";
-import { RenderSettings } from "./parsing/PuzzleTypeDefinition.js";
-import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable.js";
+import { Constraint, ConstraintCheck } from "./Constraint";
+import PuzzleGrid from "./grids/PuzzleGrid";
+import { RenderSettings } from "./parsing/PuzzleTypeDefinition";
+import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable";
 
 /**
  * The Puzzle class is the main entrypoint to the solving algorithm. A Puzzle

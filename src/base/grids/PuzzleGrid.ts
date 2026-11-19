@@ -1,5 +1,5 @@
-import Array2D from "../util/Array2D.js";
-import { GridCell, GridEdge, GridVertex } from "./index.js";
+import { GridCell, GridEdge, GridVertex } from ".";
+import Array2D from "../util/Array2D";
 
 /**
  * How to make a custom puzzle grid
