@@ -51,6 +51,7 @@
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
 import { puzzleMap } from "@/base/puzzle-types";
+import RenderedGrid from "@/components/RenderedGrid.vue";
 
 type Deduction = {
   variable: number;
@@ -66,7 +67,7 @@ const puzzleReady = ref<boolean>(false);
 let puzzleData: any = null;
 let puzzleType: any = null;
 const livePuzzle = ref<Puzzle | null>(null);
-const renderedGrid = ref();
+const renderedGrid = ref<typeof RenderedGrid>();
 let renderMessage: any = null;
 
 const deductions = ref<Deduction[]>([]);
@@ -160,7 +161,7 @@ const applyDeduction = (deduct_id: number) => {
   const variable = livePuzzle.value.variables[deduction.variable];
   variable.value.splice(variable.value.indexOf(deduction.value), 1);
 
-  renderedGrid.value.renderPuzzle();
+  renderedGrid.value!.renderPuzzle();
   readyToAnalyze = true;
   puzzleWorker.postMessage({ command: "applydeduction", deduct_id });
 };
@@ -173,12 +174,12 @@ const applyAllDeductions = () => {
   }
 
   deductions.value = [];
-  renderedGrid.value.renderPuzzle();
+  renderedGrid.value!.renderPuzzle();
   readyToAnalyze = false;
   puzzleWorker.postMessage({ command: "applyall" });
 };
 watch(hoveredDeduction, () => {
-  renderedGrid.value.changeHighlight(hoveredDeduction.value?.variable ?? null);
+  renderedGrid.value!.changeHighlight(hoveredDeduction.value?.variable ?? null);
 });
 
 const renderPuzzle = () => {
@@ -189,7 +190,7 @@ const renderPuzzle = () => {
   answer.forEach((v, i) => {
     livePuzzle.value!.variables[i].value = v;
   });
-  renderedGrid.value.renderPuzzle();
+  renderedGrid.value!.renderPuzzle();
   statusText.value = data.output;
 };
 

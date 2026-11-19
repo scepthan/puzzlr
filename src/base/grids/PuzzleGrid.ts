@@ -14,8 +14,8 @@ import Array2D from "../util/Array2D";
  * See individual methods below for more info on how to use them.
  */
 export default class PuzzleGrid {
-  #width;
-  #height;
+  private _width;
+  private _height;
   #finalized = false;
   #edgeMap = new Map<string, GridEdge>();
   onNewCell?: (cell: GridCell) => void;
@@ -34,8 +34,8 @@ export default class PuzzleGrid {
    */
   constructor(w: number, h: number = w) {
     if (!(w > 0) || !(h > 0)) throw new Error("Grid dimensions must be positive");
-    this.#width = w;
-    this.#height = h;
+    this._width = w;
+    this._height = h;
     this.cellmap = new Array2D(1, 1);
   }
 
@@ -261,10 +261,10 @@ export default class PuzzleGrid {
   }
 
   get width() {
-    return this.#width;
+    return this._width;
   }
   get height() {
-    return this.#height;
+    return this._height;
   }
   get finalized() {
     return this.#finalized;
