@@ -48,10 +48,12 @@
 </template>
 
 <script lang="ts" setup>
+import { PuzzleDefinitions } from "@/assets/puzzle-types";
+import { createPuzzle } from "@/base/parsing/createPuzzle";
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
-import { puzzleMap } from "@/base/puzzle-types";
 import RenderedGrid from "@/components/RenderedGrid.vue";
+import { parse } from "yaml";
 
 type Deduction = {
   variable: number;
@@ -103,10 +105,19 @@ watch(puzzleFile, (file) => {
     }
     const type = puzzleData.type;
 
-    puzzleType = puzzleMap.get(type);
-    if (!puzzleType) {
+    const newPuzzDef = PuzzleDefinitions.get(type);
+    if (!newPuzzDef) {
       statusText.value = "Could not determine puzzle type.";
-      console.log("Could not determine puzzle type.");
+      console.log("Invalid puzzle type:", type);
+      return;
+    }
+
+    try {
+      puzzleType = parse(newPuzzDef);
+      console.log("Parsed puzzle type:", puzzleType);
+    } catch (e) {
+      statusText.value = "Error parsing puzzle rules.";
+      console.log("Error parsing puzzle type:", e);
       return;
     }
 
@@ -116,7 +127,8 @@ watch(puzzleFile, (file) => {
 
 const resetPuzzle = () => {
   try {
-    livePuzzle.value = new puzzleType(puzzleData);
+    livePuzzle.value = createPuzzle(puzzleType, puzzleData);
+    console.log(livePuzzle.value);
     puzzleWorker.postMessage({ command: "load", data: puzzleData });
     console.log("Data loaded.");
   } catch (e) {

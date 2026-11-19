@@ -13,13 +13,15 @@ export const createPuzzle = (
 
   const puzzle = new Puzzle(grid, puzzleType.renderSettings);
 
+  let hintsSet = false;
   if (puzzleType.inputs.hint_cells && puzzleDefinition.task) {
     addHints(grid, puzzleDefinition.task, puzzleType.inputs.hint_cells.empty_value);
+    hintsSet = true;
   }
 
   createVariables(puzzle, puzzleType);
   if (puzzleType.inputs.given_cells && puzzleDefinition.task) {
-    setGivens(grid, puzzleDefinition.task, puzzleType.inputs.given_cells.empty_value);
+    setGivens(grid, puzzleDefinition.task, puzzleType.inputs.given_cells.empty_value, !hintsSet);
   }
 
   createConstraints(puzzle, puzzleType, puzzleDefinition);
@@ -110,11 +112,13 @@ const setGivens = (
   grid: PuzzleGrid,
   task: PuzzleVariableValue[][],
   emptyValue?: PuzzleVariableValue,
+  setHints?: boolean,
 ) => {
   grid.cellmap.map((cell, { x, y }) => {
     const givenValue = task[y]?.[x];
     if (givenValue !== undefined && givenValue !== emptyValue) {
       cell.value = [givenValue];
+      if (setHints) cell.hint = givenValue;
     }
   });
 };
