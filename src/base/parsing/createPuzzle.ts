@@ -1,7 +1,7 @@
-import { Puzzle, PuzzleGrid, SquareGrid } from "..";
+import { ConstraintCheck, Puzzle, PuzzleGrid, SquareGrid } from "..";
 import { PuzzleVariable, PuzzleVariableValue } from "../PuzzleVariable";
 import { PuzzleDefinition, PuzzleGridDefinition } from "./PuzzleDefinition";
-import { PuzzleTypeDefinition } from "./PuzzleTypeDefinition";
+import { PuzzleConstraintCheckDefinition, PuzzleTypeDefinition } from "./PuzzleTypeDefinition";
 
 export const createPuzzle = (
   puzzleType: PuzzleTypeDefinition,
@@ -69,7 +69,7 @@ const addHints = (
 const createVariables = (puzzle: Puzzle, puzzleType: PuzzleTypeDefinition) => {
   for (const variableDef of puzzleType.variables) {
     const { on, value, required } = variableDef;
-    const convertedValue = convertValueDefinition(value, puzzle);
+    const convertedValue = parseValueDefinition(value, puzzle);
 
     let variables: PuzzleVariable[] = [];
     if (on === "cells") {
@@ -91,7 +91,7 @@ const createVariables = (puzzle: Puzzle, puzzleType: PuzzleTypeDefinition) => {
   }
 };
 
-const convertValueDefinition = (
+const parseValueDefinition = (
   valueDef: string | PuzzleVariableValue[],
   puzzle: Puzzle,
 ): PuzzleVariableValue[] => {
@@ -100,9 +100,13 @@ const convertValueDefinition = (
   }
 
   switch (valueDef) {
+    case "binary":
+      return [0, 1];
+
     case "num_1_to_size":
       const length = puzzle.grid.width;
       return Array.from({ length }, (_, i) => i + 1);
+
     default:
       throw new Error(`Unknown value definition: ${valueDef}`);
   }
@@ -127,4 +131,98 @@ const createConstraints = (
   puzzle: Puzzle,
   puzzleType: PuzzleTypeDefinition,
   puzzleDefinition: PuzzleDefinition,
-) => {};
+) => {
+  for (const constraintDefinition of puzzleType.constraints) {
+    const variableGroups = [];
+    for (const variableGrouping of constraintDefinition.on.split(/, */)) {
+      variableGroups.push(...parseVariableGrouping(puzzle, variableGrouping));
+    }
+    console.log(constraintDefinition.on, variableGroups);
+  }
+};
+
+const parseVariableGrouping = (puzzle: Puzzle, groupName: string): PuzzleVariable[][] => {
+  switch (groupName) {
+    case "cells":
+      return puzzle.grid.cells.map((cell) => [cell]);
+
+    case "cell_lines":
+      if (puzzle.grid.cellLines) return puzzle.grid.cellLines;
+      throw new Error(`Could not determine cell lines for grid type ${puzzle.grid.type}`);
+
+    case "areas":
+      const areaMap = new Map<number, PuzzleVariable[]>();
+      for (const cell of puzzle.grid.cells)
+        if (cell.area_id !== null) {
+          const area = areaMap.getOrInsert(cell.area_id, []);
+          area.push(cell);
+        }
+      return Array.from(areaMap.values());
+
+    default:
+      throw new Error(`Unknown variable grouping: ${groupName}`);
+  }
+};
+
+const parseConstraintCheck = <T extends PuzzleVariable>(
+  check: PuzzleConstraintCheckDefinition,
+  puzzle: Puzzle,
+): ConstraintCheck<T> => {
+  const { key, value } = convertConstraintCheckPart(check);
+
+  switch (key) {
+    case "contains_all":
+      if (!(value instanceof Array) || value.length !== 2)
+        throw new Error("`contains_all` constraint part needs exactly two arguments");
+
+      const groupDefinition = value[0];
+      if (typeof groupDefinition !== "string")
+        throw new Error("Constraint check variable group definition must be a string");
+      const group = parseConstraintCheckVariableGroup(groupDefinition);
+
+      const valuesDefinition = value[1];
+      if (typeof valuesDefinition === "object" && !(valuesDefinition instanceof Array))
+        throw new Error("Constraint check value definition must be a number, shorthand, or array");
+      const values = parseConstraintValueDefinition(valuesDefinition, puzzle);
+
+      console.log(group, values);
+
+      throw "Unimplemented";
+
+    default:
+      throw new Error(`Unknown constraint check: ${key}`);
+  }
+};
+
+const parseConstraintCheckVariableGroup = (
+  groupDefinition: string,
+): ((variables: PuzzleVariable[]) => PuzzleVariable[]) => {
+  switch (groupDefinition) {
+    case "cells":
+    case "vars":
+      return (variables) => variables;
+
+    case "cell":
+    case "var":
+      return (variables) => variables.slice(0, 1);
+
+    default:
+      throw new Error(`Unknown variable group definition: ${groupDefinition}`);
+  }
+};
+
+const parseConstraintValueDefinition = (
+  value: number | string | PuzzleVariableValue[],
+  puzzle: Puzzle,
+): PuzzleVariableValue | PuzzleVariableValue[] => {
+  if (typeof value === "number") return value;
+  return parseValueDefinition(value, puzzle);
+};
+
+const convertConstraintCheckPart = (part: PuzzleConstraintCheckDefinition) => {
+  if (Object.keys(part).length !== 1)
+    throw new Error("Puzzle constraint check part needs exactly one argument");
+
+  const [key] = Object.keys(part);
+  return { key, value: part[key] };
+};

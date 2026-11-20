@@ -40,5 +40,7 @@ export interface PuzzleConstraintDefinition {
   check: PuzzleConstraintCheckDefinition;
 }
 export interface PuzzleConstraintCheckDefinition {
-  [key: string]: string | (PuzzleVariableValue | PuzzleConstraintCheckDefinition)[];
+  [key: string]:
+    | string
+    | (PuzzleVariableValue | PuzzleVariableValue[] | PuzzleConstraintCheckDefinition)[];
 }

@@ -2,6 +2,10 @@ import { GridCell, GridEdge, GridVertex, PuzzleGrid } from "..";
 import { Array2D } from "../util";
 
 export class SquareGrid extends PuzzleGrid {
+  get type() {
+    return "square";
+  }
+
   areamap: Array2D<number | null>;
   vertmap: Array2D<GridVertex>;
   edgemap: { vert: Array2D<GridEdge>; horiz: Array2D<GridEdge> };

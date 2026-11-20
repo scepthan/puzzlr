@@ -14,11 +14,25 @@ import { Array2D } from "../util";
  * See individual methods below for more info on how to use them.
  */
 export class PuzzleGrid implements IPuzzleGrid {
+  get type() {
+    return "default";
+  }
+
   private _width;
   private _height;
   #finalized = false;
   #edgeMap = new Map<string, GridEdge>();
   onNewCell?: (cell: GridCell) => void;
+
+  get width() {
+    return this._width;
+  }
+  get height() {
+    return this._height;
+  }
+  get finalized() {
+    return this.#finalized;
+  }
 
   cells: GridCell[] = [];
   verts: GridVertex[] = [];
@@ -259,19 +273,10 @@ export class PuzzleGrid implements IPuzzleGrid {
     for (const cell of this.cells) cell.finalize();
     if (this.cellmap.size == 1) this.cellmap = new Array2D([this.cells]);
   }
-
-  get width() {
-    return this._width;
-  }
-  get height() {
-    return this._height;
-  }
-  get finalized() {
-    return this.#finalized;
-  }
 }
 
 export interface IPuzzleGrid {
+  type: string;
   width: number;
   height: number;
 

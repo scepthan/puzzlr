@@ -11,7 +11,7 @@ inputs:
 
 variables:
   - on: cells
-    value: [0, 1]
+    value: binary
     required: true
 
 constraints:

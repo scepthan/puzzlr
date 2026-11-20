@@ -21,4 +21,4 @@ variables:
 constraints:
   - on: cell_lines, areas
     check:
-      all_distinct: cells
+      contains_all: [cells, num_1_to_size]
