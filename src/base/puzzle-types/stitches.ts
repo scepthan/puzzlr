@@ -1,8 +1,8 @@
-import Puzzle from "../Puzzle";
+import { Puzzle } from "../Puzzle";
 import { SUM_EQUALS, SUM_EQUALS_IF } from "../generic-constraints";
 import { GridEdge, SquareGrid } from "../grids";
 
-export default class StitchesPuzzle extends Puzzle<SquareGrid> {
+export default class StitchesPuzzle extends Puzzle {
   static get type() {
     return "stitches";
   }
@@ -55,7 +55,7 @@ export default class StitchesPuzzle extends Puzzle<SquareGrid> {
     }
 
     let i = 0;
-    for (const vars of [...this.grid.cellCols, ...this.grid.cellRows]) {
+    for (const vars of [...this.grid.cellCols!, ...this.grid.cellRows!]) {
       this.addConstraint(SUM_EQUALS, vars, sums[i++]);
     }
   }

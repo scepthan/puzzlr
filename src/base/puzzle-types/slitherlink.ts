@@ -1,7 +1,7 @@
-import Puzzle from "../Puzzle";
+import { Puzzle } from "../Puzzle";
 import { PuzzleVariable } from "../PuzzleVariable";
 import { CONTIG_EDGE_ALL, SUM_EQUALS, SUM_EQUALS_ANY } from "../generic-constraints";
-import SquareGrid from "../grids/SquareGrid";
+import { SquareGrid } from "../grids/SquareGrid";
 
 export default class SlitherlinkPuzzle extends Puzzle {
   static get type() {

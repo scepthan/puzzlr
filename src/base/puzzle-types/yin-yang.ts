@@ -1,7 +1,6 @@
 import { CONTIG_CELL_ALL } from "../generic-constraints";
-import GridCell from "../grids/GridCell";
-import SquareGrid from "../grids/SquareGrid";
-import Puzzle from "../Puzzle";
+import { GridCell, SquareGrid } from "../grids";
+import { Puzzle } from "../Puzzle";
 import { PuzzleVariable } from "../PuzzleVariable";
 
 export default class YinYangPuzzle extends Puzzle {

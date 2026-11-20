@@ -51,7 +51,7 @@
 import { PuzzleDefinitions } from "@/assets/puzzle-types";
 import { createPuzzle } from "@/base/parsing/createPuzzle";
 import { PuzzleDefinition } from "@/base/parsing/PuzzleDefinition";
-import Puzzle from "@/base/Puzzle";
+import { Puzzle } from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
 import RenderedGrid from "@/components/RenderedGrid.vue";
 import { parse } from "yaml";

@@ -2,7 +2,7 @@
  * Construct representing a rectangular array of data. Width and height cannot
  * be changed after creation.
  */
-export default class Array2D<T> {
+export class Array2D<T> {
   #width: number = 0;
   #height: number = 0;
   data: T[] = [];

@@ -1,9 +1,8 @@
 import { CONTAINS_ALL } from "../generic-constraints";
-import GridCell from "../grids/GridCell";
-import SquareGrid from "../grids/SquareGrid";
-import Puzzle from "../Puzzle";
+import { GridCell, SquareGrid } from "../grids";
+import { Puzzle } from "../Puzzle";
 
-export default class SudokuPuzzle extends Puzzle<SquareGrid> {
+export default class SudokuPuzzle extends Puzzle {
   static get type() {
     return "sudoku";
   }
@@ -48,7 +47,7 @@ export default class SudokuPuzzle extends Puzzle<SquareGrid> {
       this.addVariable(cell, hint && hint != -1 ? [parseInt(hint + "", 36)] : values.slice());
       areas[((x / boxwidth) | 0) + boxheight * ((y / boxheight) | 0)].push(cell);
     });
-    [...this.grid.cellLines, ...areas].forEach((x) =>
+    [...this.grid.cellLines!, ...areas].forEach((x) =>
       this.addConstraint(CONTAINS_ALL, x, values.slice()),
     );
   }

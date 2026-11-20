@@ -1,9 +1,8 @@
-import Puzzle from "@/base/Puzzle";
+import { Puzzle } from "@/base/Puzzle";
 import { parse } from "yaml";
 import { PuzzleDefinitions } from "./assets/puzzle-types";
 import { PuzzleDefinition, PuzzleTypeDefinition, createPuzzle } from "./base/parsing";
 
-let puzzleData: PuzzleDefinition | null = null;
 let puzzleType: PuzzleTypeDefinition | undefined;
 let livePuzzle: Puzzle | null = null;
 let options: any = { max_depth: 2, mode: "fast" };
@@ -36,7 +35,6 @@ onmessage = (e) => {
 };
 
 function loadPuzzle(puzzle: PuzzleDefinition) {
-  puzzleData = puzzle;
   const type = puzzle.type;
   const puzzleDefinition = PuzzleDefinitions.get(type);
   if (!puzzleDefinition) throw new Error("Unknown puzzle type: " + type);

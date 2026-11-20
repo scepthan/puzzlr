@@ -1,4 +1,4 @@
-import Puzzle from "../Puzzle";
+import { Puzzle } from "../Puzzle";
 import { SUM_EQUALS } from "../generic-constraints";
 import { GridEdge, SquareGrid } from "../grids";
 

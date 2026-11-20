@@ -1,5 +1,5 @@
 import { GridCell, GridEdge, GridVertex } from ".";
-import Array2D from "../util/Array2D";
+import { Array2D } from "../util";
 
 /**
  * How to make a custom puzzle grid
@@ -13,7 +13,7 @@ import Array2D from "../util/Array2D";
  *
  * See individual methods below for more info on how to use them.
  */
-export default class PuzzleGrid {
+export class PuzzleGrid implements IPuzzleGrid {
   private _width;
   private _height;
   #finalized = false;
@@ -269,4 +269,19 @@ export default class PuzzleGrid {
   get finalized() {
     return this.#finalized;
   }
+}
+
+export interface IPuzzleGrid {
+  width: number;
+  height: number;
+
+  cells: GridCell[];
+  verts: GridVertex[];
+  edges: GridEdge[];
+
+  cellmap: Array2D<GridCell>;
+
+  cellLines?: GridCell[][];
+  cellRows?: GridCell[][];
+  cellCols?: GridCell[][];
 }

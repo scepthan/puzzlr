@@ -1,5 +1,5 @@
 import { Constraint, ConstraintCheck } from "./Constraint";
-import PuzzleGrid from "./grids/PuzzleGrid";
+import { IPuzzleGrid } from "./grids/PuzzleGrid";
 import { RenderSettings } from "./parsing/PuzzleTypeDefinition";
 import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./PuzzleVariable";
 
@@ -10,8 +10,8 @@ import { PuzzleVariable, PuzzleVariableValue, PuzzleVariableValues } from "./Puz
  * theoretically be represented and solved with a generic algorithm. In prac-
  * tice, however, some puzzles play more nicely with this system than others.
  */
-export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
-  grid: TGrid;
+export class Puzzle {
+  grid: IPuzzleGrid;
   options: any;
   variables: PuzzleVariable[] = [];
   constraints: Constraint[] = [];
@@ -39,7 +39,7 @@ export default class Puzzle<TGrid extends PuzzleGrid = PuzzleGrid> {
   /**
    * Takes a grid and begins the process of creating a puzzle.
    */
-  constructor(grid: TGrid, renderSettings?: RenderSettings) {
+  constructor(grid: IPuzzleGrid, renderSettings?: RenderSettings) {
     this.grid = grid;
     if (renderSettings) {
       this._renderSettings = renderSettings;

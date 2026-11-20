@@ -1,9 +1,7 @@
-import { PuzzleGrid } from "..";
+import { GridEdge, GridVertex, PuzzleGrid } from ".";
 import { PuzzleVariable } from "../PuzzleVariable";
-import GridEdge from "./GridEdge";
-import GridVertex from "./GridVertex";
 
-export default class GridCell extends PuzzleVariable {
+export class GridCell extends PuzzleVariable {
   grid: PuzzleGrid;
   verts: GridVertex[];
   edges: GridEdge[] = [];

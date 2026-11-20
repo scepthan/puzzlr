@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { GridCell, GridEdge, PuzzleGrid } from "@/base";
-import Puzzle from "@/base/Puzzle";
+import { GridCell, GridEdge, Puzzle } from "@/base";
+import { IPuzzleGrid } from "@/base/grids/PuzzleGrid";
 import { PuzzleVariable, PuzzleVariableValues } from "@/base/PuzzleVariable";
 
 const ns = "http://www.w3.org/2000/svg";
@@ -20,7 +20,7 @@ let puzzle: Puzzle | null;
 
 const solution = ref();
 let svg: SVGSVGElement;
-let grid: PuzzleGrid;
+let grid: IPuzzleGrid;
 let scale: number, renderfuncs: string[];
 let elemBuffer: SVGElement[] = [];
 let edgecache: { elems: SVGElement[]; value: PuzzleVariableValues }[] = [];

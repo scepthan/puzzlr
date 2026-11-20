@@ -1,10 +1,8 @@
+import { Puzzle, PuzzleVariable } from "..";
 import { SUM_EQUALS } from "../generic-constraints";
-import GridCell from "../grids/GridCell";
-import SquareGrid from "../grids/SquareGrid";
-import Puzzle from "../Puzzle";
-import { PuzzleVariable } from "../PuzzleVariable";
+import { GridCell, SquareGrid } from "../grids";
 
-export default class ThermometersPuzzle extends Puzzle<SquareGrid> {
+export default class ThermometersPuzzle extends Puzzle {
   static get type() {
     return "thermometers";
   }
@@ -53,7 +51,7 @@ export default class ThermometersPuzzle extends Puzzle<SquareGrid> {
     }
 
     let i = 0;
-    for (const vars of [...this.grid.cellCols, ...this.grid.cellRows]) {
+    for (const vars of this.grid.cellLines!) {
       this.addConstraint(SUM_EQUALS, vars, sums[i++]);
     }
   }

@@ -1,6 +1,4 @@
-import { Constraint } from "./Constraint";
-import Puzzle from "./Puzzle";
-import { PuzzleVariable } from "./PuzzleVariable";
-
+export * from "./Constraint";
 export * from "./grids";
-export { Constraint, Puzzle, PuzzleVariable };
+export * from "./Puzzle";
+export * from "./PuzzleVariable";

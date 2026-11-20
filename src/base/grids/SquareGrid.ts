@@ -1,7 +1,7 @@
 import { GridCell, GridEdge, GridVertex, PuzzleGrid } from "..";
-import Array2D from "../util/Array2D";
+import { Array2D } from "../util";
 
-export default class SquareGrid extends PuzzleGrid {
+export class SquareGrid extends PuzzleGrid {
   areamap: Array2D<number | null>;
   vertmap: Array2D<GridVertex>;
   edgemap: { vert: Array2D<GridEdge>; horiz: Array2D<GridEdge> };
@@ -198,6 +198,6 @@ export default class SquareGrid extends PuzzleGrid {
    * Returns the cells in each row and column as an Array of Arrays.
    */
   get cellLines() {
-    return [...this.cellRows, ...this.cellCols];
+    return [...this.cellCols, ...this.cellRows];
   }
 }
