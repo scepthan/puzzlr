@@ -1,8 +1,10 @@
 import Puzzle from "@/base/Puzzle";
-import { PuzzleType, puzzleMap } from "@/base/puzzle-types";
+import { parse } from "yaml";
+import { PuzzleDefinitions } from "./assets/puzzle-types";
+import { PuzzleDefinition, PuzzleTypeDefinition, createPuzzle } from "./base/parsing";
 
-let puzzleData: Puzzle | null = null;
-let puzzleType: PuzzleType | undefined;
+let puzzleData: PuzzleDefinition | null = null;
+let puzzleType: PuzzleTypeDefinition | undefined;
 let livePuzzle: Puzzle | null = null;
 let options: any = { max_depth: 2, mode: "fast" };
 
@@ -33,12 +35,14 @@ onmessage = (e) => {
   }
 };
 
-function loadPuzzle(puzzle: Puzzle) {
+function loadPuzzle(puzzle: PuzzleDefinition) {
   puzzleData = puzzle;
   const type = puzzle.type;
-  puzzleType = puzzleMap.get(type);
-  if (!puzzleType) throw new Error("Unknown puzzle type: " + type);
-  livePuzzle = new puzzleType(puzzleData as any);
+  const puzzleDefinition = PuzzleDefinitions.get(type);
+  if (!puzzleDefinition) throw new Error("Unknown puzzle type: " + type);
+  puzzleType = parse(puzzleDefinition);
+  if (!puzzleType) throw new Error("Error parsing puzzle type: " + type);
+  livePuzzle = createPuzzle(puzzleType, puzzle);
   if (!livePuzzle) return;
   options = { max_depth: 2, mode: "fast" };
   livePuzzle.initiate_solve(options);

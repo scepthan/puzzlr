@@ -50,6 +50,7 @@
 <script lang="ts" setup>
 import { PuzzleDefinitions } from "@/assets/puzzle-types";
 import { createPuzzle } from "@/base/parsing/createPuzzle";
+import { PuzzleDefinition } from "@/base/parsing/PuzzleDefinition";
 import Puzzle from "@/base/Puzzle";
 import { PuzzleVariableValue, PuzzleVariableValues } from "@/base/PuzzleVariable";
 import RenderedGrid from "@/components/RenderedGrid.vue";
@@ -66,7 +67,7 @@ const solveMode = ref("fast");
 const statusText = ref<string>("");
 const puzzleReady = ref<boolean>(false);
 
-let puzzleData: any = null;
+let puzzleData: PuzzleDefinition | null = null;
 let puzzleType: any = null;
 const livePuzzle = ref<Puzzle | null>(null);
 const renderedGrid = ref<typeof RenderedGrid>();
@@ -126,6 +127,7 @@ watch(puzzleFile, (file) => {
 });
 
 const resetPuzzle = () => {
+  if (!puzzleData) return;
   try {
     livePuzzle.value = createPuzzle(puzzleType, puzzleData);
     console.log(livePuzzle.value);
