@@ -14,14 +14,14 @@ export const createPuzzle = (
   const puzzle = new Puzzle(grid, puzzleType.renderSettings);
 
   let hintsSet = false;
-  if (puzzleType.inputs.hint_cells && puzzleDefinition.task) {
-    addHints(grid, puzzleDefinition.task, puzzleType.inputs.hint_cells.empty_value);
+  if (puzzleType.inputs.cell_hints && puzzleDefinition.task) {
+    addHints(grid, puzzleDefinition.task, puzzleType.inputs.cell_hints.empty_value);
     hintsSet = true;
   }
 
   createVariables(puzzle, puzzleType);
-  if (puzzleType.inputs.given_cells && puzzleDefinition.task) {
-    setGivens(grid, puzzleDefinition.task, puzzleType.inputs.given_cells.empty_value, !hintsSet);
+  if (puzzleType.inputs.cell_givens && puzzleDefinition.task) {
+    setGivens(grid, puzzleDefinition.task, puzzleType.inputs.cell_givens.empty_value, !hintsSet);
   }
 
   createConstraints(puzzle, puzzleType, puzzleDefinition);
@@ -69,20 +69,24 @@ const addHints = (
 const createVariables = (puzzle: Puzzle, puzzleType: PuzzleTypeDefinition) => {
   for (const variableDef of puzzleType.variables) {
     const { on, value, required } = variableDef;
+    const targets = on instanceof Array ? on : [on];
     const convertedValue = parseValueDefinition(value, puzzle);
 
-    let variables: PuzzleVariable[] = [];
-    if (on === "cells") {
-      variables = puzzle.grid.cells;
-      if (puzzleType.inputs.hint_cells && !puzzleType.inputs.hint_cells.variable_overlap) {
-        variables = puzzle.grid.cells.filter((cell) => cell.hint === undefined);
+    const variables: PuzzleVariable[] = [];
+    for (const target of targets) {
+      if (target === "cells") {
+        if (puzzleType.inputs.cell_hints && !puzzleType.inputs.cell_hints.variable_overlap) {
+          variables.push(...puzzle.grid.cells.filter((cell) => cell.hint === undefined));
+        } else {
+          variables.push(...puzzle.grid.cells);
+        }
+      } else if (target === "edges") {
+        variables.push(...puzzle.grid.edges);
+      } else if (target === "inner_edges") {
+        variables.push(...puzzle.grid.edges.filter((edge) => edge.isInnerEdge()));
+      } else {
+        throw new Error(`Unknown variable target: ${target}`);
       }
-    } else if (on === "edges") {
-      variables = puzzle.grid.edges;
-    } else if (on === "inner_edges") {
-      variables = puzzle.grid.edges.filter((edge) => edge.isInnerEdge());
-    } else {
-      throw new Error(`Unknown variable target: ${on}`);
     }
 
     for (const variable of variables) {
@@ -134,10 +138,15 @@ const createConstraints = (
 ) => {
   for (const constraintDefinition of puzzleType.constraints) {
     const variableGroups = [];
-    for (const variableGrouping of constraintDefinition.on.split(/, */)) {
-      variableGroups.push(...parseVariableGrouping(puzzle, variableGrouping));
+    const on = constraintDefinition.on;
+    const groupings = on instanceof Array ? on : [on];
+    for (const grouping of groupings) {
+      variableGroups.push(...parseVariableGrouping(puzzle, grouping));
     }
     console.log(constraintDefinition.on, variableGroups);
+
+    const check = parseConstraintCheck(constraintDefinition.check, puzzle);
+    console.log(check);
   }
 };
 

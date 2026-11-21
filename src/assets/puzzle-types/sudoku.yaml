@@ -9,7 +9,7 @@ renderSettings:
 
 inputs:
   boxes: true
-  given_cells:
+  cell_givens:
     type: num_36
     empty_value: 0
 
@@ -19,6 +19,6 @@ variables:
     required: true
 
 constraints:
-  - on: cell_lines, areas
+  - on: [cell_lines, areas]
     check:
       contains_all: [cells, num_1_to_size]

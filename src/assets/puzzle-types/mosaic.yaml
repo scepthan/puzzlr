@@ -5,7 +5,7 @@ renderSettings:
   funcs: edgeplain, binarygrey, numhint
 
 inputs:
-  hint_cells:
+  cell_hints:
     type: number
     empty_value: -1
     variable_overlap: true

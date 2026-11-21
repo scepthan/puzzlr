@@ -1,0 +1,37 @@
+name: stitches
+
+renderSettings:
+  defaultScale: 30
+  funcs:
+    - edgestitch
+    - stitchhole
+
+inputs:
+  areas: true
+  border_hints:
+    type: number
+    strategy: top_left
+  globals:
+    stitch_count: number
+
+variables:
+  - on: area_borders_inner
+    value: binary
+    required: true
+  - on: cells
+    value: binary
+    required: false
+
+constraints:
+  - on: area_borders_inner
+    check:
+      if:
+        - equals: [edge, 1]
+        - all_equals: [edge.cells, 1]
+  - on: cells
+    check:
+      if:
+        - equals: [cell, 1]
+        - equals:
+            - sum: cell.edges
+            - 1

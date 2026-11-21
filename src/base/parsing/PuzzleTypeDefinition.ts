@@ -16,10 +16,12 @@ export interface RenderSettings {
 export interface PuzzleInputsDefinition {
   areas?: boolean;
   boxes?: boolean;
-  hint_cells?: PuzzleHintsDefinition;
-  given_cells?: PuzzleGivensDefinition;
+  cell_hints?: PuzzleCellHintsDefinition;
+  cell_givens?: PuzzleGivensDefinition;
+  border_hints?: PuzzleBorderHintsDefinition;
+  globals?: PuzzleGlobalsDefinition;
 }
-export interface PuzzleHintsDefinition {
+export interface PuzzleCellHintsDefinition {
   type: string;
   empty_value?: PuzzleVariableValue;
   variable_overlap?: boolean;
@@ -28,15 +30,24 @@ export interface PuzzleGivensDefinition {
   type: string;
   empty_value?: PuzzleVariableValue;
 }
+export interface PuzzleBorderHintsDefinition {
+  type: string;
+  empty_value?: PuzzleVariableValue;
+  strategy: "top_left" | "surround";
+}
+
+export interface PuzzleGlobalsDefinition {
+  [key: string]: string;
+}
 
 export interface PuzzleVariableDefinition {
-  on: string;
+  on: string | string[];
   value: string | PuzzleVariableValue[];
   required?: boolean;
 }
 
 export interface PuzzleConstraintDefinition {
-  on: string;
+  on: string | string[];
   check: PuzzleConstraintCheckDefinition;
 }
 export interface PuzzleConstraintCheckDefinition {

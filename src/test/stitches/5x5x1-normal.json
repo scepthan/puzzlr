@@ -16,6 +16,9 @@
         ],
         "sums": [ 5, 4, 1, 2, 0,
                   2, 2, 2, 2, 4 ],
+        "border_hints":
+                [ 5, 4, 1, 2, 0,
+                  2, 2, 2, 2, 4 ],
         "puzzleteam_size": "0",
         "puzzleteam_id": "9,451,736"
     }
